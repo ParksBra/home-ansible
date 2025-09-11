@@ -1,0 +1,4 @@
+service_user: "kubernetes"
+service_group: "kubernetes"
+ansible_user: "ansible"
+ansible_group: "ansible"

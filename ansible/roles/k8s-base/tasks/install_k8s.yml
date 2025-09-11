@@ -1,0 +1,38 @@
+- name: install kubelet
+  apt:
+    name: kubelet=1.33.4-1.1
+    state: present
+    force: true
+  become: true
+
+- name: hold kubelet at current version
+  dpkg_selections:
+    name: kubelet
+    selection: hold
+  become: true
+
+- name: install kubeadm
+  apt:
+    name: kubeadm=1.33.4-1.1
+    state: present
+    force: true
+  become: true
+
+- name: hold kubeadm at current version
+  dpkg_selections:
+    name: kubeadm
+    selection: hold
+  become: true
+
+- name: install kubectl
+  apt:
+    name: kubectl=1.33.4-1.1
+    state: present
+    force: true
+  become: true
+
+- name: hold kubectl at current version
+  dpkg_selections:
+    name: kubectl
+    selection: hold
+  become: true

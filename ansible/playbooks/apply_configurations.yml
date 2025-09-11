@@ -1,0 +1,12 @@
+---
+- hosts: homeassistant
+  roles:
+    - homeassistant
+  become: true
+  become_user: root
+
+- hosts: swag
+  roles:
+    - swag
+  become: true
+  become_user: root

@@ -1,0 +1,8 @@
+- name: configure rpi for kubernetes
+  include_tasks: configure_rpi5_host.yml
+
+- name: install kubernetes apt repository
+  include_tasks: install_kubernetes_repo.yml
+
+- name: install container dependencies
+  include_tasks: install_container_dependencies.yml

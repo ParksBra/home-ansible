@@ -1,0 +1,46 @@
+- name: Clean k8s before initializing
+  shell: "kubeadm reset --force --cri-socket={{ k8s_container_runtime_socket }}"
+  register: reset_k8s_cluster
+
+- name: get init token
+  include_tasks: ../../common/tasks/get_secret.yml
+  vars:
+    secret_name: k8s-discovery-token
+
+- name: set init token
+  set_fact:
+    k8s_cluster_token: "{{ secret_value }}"
+
+- name: debug secret
+  debug:
+    var: k8s_cluster_token
+
+- name: Create/Init k8s cluster
+  when: reset_k8s_cluster.rc == 0
+  shell: |
+    kubeadm init --service-cidr {{ k8s_service_cidr }} \
+                  --kubernetes-version {{ k8s_version }} \
+                  --pod-network-cidr {{ k8s_pod_network_cidr }} \
+                  --token {{ k8s_cluster_token }} \
+                  --apiserver-advertise-address {{ ansible_host }} \
+                  --cri-socket={{ k8s_container_runtime_socket }} \
+                  {{ k8s_kubeadm_opts }} \
+                  {{ k8s_init_opts }}
+  register: init_k8s_cluster
+  environment:
+    no_proxy: "$no_proxy,.svc,.svc.cluster.local"
+
+- name: Create user k8s directory
+  file:
+    path: ".kube/"
+    state: directory
+
+- name: Copy admin.conf to Home directory
+  when: init_cluster is succeeded
+  copy:
+    src: "/etc/kubernetes/admin.conf"
+    dest: ".kube/config"
+    owner: "{{ ansible_user | default(ansible_user_id) }}"
+    group: "{{ ansible_user | default(ansible_user_id) }}"
+    mode: 0700
+    remote_src: true

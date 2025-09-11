@@ -1,0 +1,29 @@
+- name: Reset Kubernetes component
+  shell: "kubeadm reset --force --cri-socket=/var/run/{{ container_runtime }}/{{ container_runtime }}.sock"
+  register: reset_cluster
+
+- name: get join token
+  include_tasks: ../../common/tasks/get_secret.yml
+  vars:
+    secret_name: k8s-discovery-token
+
+- name: set join token
+  set_fact:
+    k8s_cluster_token: "{{ secret_value }}"
+
+- name: debug secret
+  debug:
+    var: k8s_cluster_token
+
+- name: Join to Kubernetes cluster
+  when: reset_cluster is succeeded
+  shell: |
+    kubeadm join --token {{ k8s_cluster_token }} \
+                --discovery-token-unsafe-skip-ca-verification \
+                --cri-socket=/var/run/{{ k8s_container_runtime }}/{{ k8s_container_runtime }}.sock \
+                {{ master_ip }}:6443
+  register: join_cluster
+  environment:
+    no_proxy: "$no_proxy,.svc,.svc.cluster.local"
+  notify:
+    - Recreate kube-dns

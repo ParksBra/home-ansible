@@ -1,0 +1,17 @@
+- name: Copy update script to root home directory
+  template:
+    src: "update_script.j2.sh"
+    dest: "/root/update_script.sh"
+    owner: root
+    group: root
+    mode: '0700'
+
+- name: Configure patching cron job
+  cron:
+    name: "weekly_patching"
+    minute: "15"
+    hour: "2"
+    weekday: "1"
+    job: "/root/update_script.sh"
+    user: root
+    state: present
