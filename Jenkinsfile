@@ -77,7 +77,7 @@ pipeline {
                     echo 'Running make_server Ansible playbook on controller...'
                     setup_env_vars(controller_ssh_key_path=controller_ssh_key_path)
                     script {
-                        sh ".venv/bin/ansible-playbook 'playbooks/make_controller.yml' -l 'k8s-controller' - "
+                        sh ".venv/bin/ansible-playbook 'playbooks/make_controller.yml' -l 'k8s-controller'"
                     }
                 }
             }
