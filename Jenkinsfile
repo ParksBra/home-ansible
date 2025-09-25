@@ -1,3 +1,14 @@
+def setup_env_vars(controller_ssh_key_path='', worker_ssh_key_path='') {
+    env.CONTROLLER_SSH_KEY_PATH = controller_ssh_key_path
+    env.WORKER_SSH_KEY_PATH = worker_ssh_key_path
+    env.INFISCAL_API_URL = params.INFISCAL_API_URL
+    env.INFISCAL_API_KEY = params.INFISCAL_API_KEY
+    env.INFISCAL_WORKSPACE_ID = params.INFISCAL_WORKSPACE_ID
+    env.INFISCAL_ENVIRONMENT = params.INFISCAL_ENVIRONMENT
+    env.GIT_BRANCH = params.BRANCH
+    env.DEBUG = params.DEBUG
+}
+
 pipeline {
     agent any
     parameters {
@@ -53,7 +64,7 @@ pipeline {
         stage('setup-environment') {
             steps {
                 echo 'Preparing environment...'
-                env.GIT_BRANCH = params.BRANCH
+                setup_env_vars()
                 script {
                     sh 'python3 -m venv .venv'
                     sh '.venv/bin/pip install --upgrade pip && .venv/bin/pip install -r requirements.txt'
@@ -62,15 +73,9 @@ pipeline {
         }
         stage('make-controller') {
             steps {
-                withCredentials([file(credentialsId: params.CONTROLLER_SSH_KEY, variable: 'controller_ssh_key_path')]) {
+                withCredentials([file(credentialsId: params.CONTROLLER_SSH_KEY, variable: 'controller_ssh_key_path'), file(credentialsId: params.WORKER_SSH_KEY, variable: 'worker_ssh_key_path')]) {
                     echo 'Running make_server Ansible playbook on controller...'
-                    env.CONTROLLER_SSH_KEY_PATH = controller_ssh_key_path
-                    env.INFISCAL_API_URL = params.INFISCAL_API_URL
-                    env.INFISCAL_API_KEY = params.INFISCAL_API_KEY
-                    env.INFISCAL_WORKSPACE_ID = params.INFISCAL_WORKSPACE_ID
-                    env.INFISCAL_ENVIRONMENT = params.INFISCAL_ENVIRONMENT
-                    env.GIT_BRANCH = params.BRANCH
-                    env.DEBUG = params.DEBUG
+                    setup_env_vars(controller_ssh_key_path=controller_ssh_key_path)
                     script {
                         sh ".venv/bin/ansible-playbook 'ansible/playbooks/make_controller.yml' -l 'k8s-controller'"
                     }
@@ -79,15 +84,9 @@ pipeline {
         }
         stage('make-workers') {
             steps {
-                withCredentials([file(credentialsId: params.WORKER_SSH_KEY, variable: 'worker_ssh_key_path')]) {
+                withCredentials([file(credentialsId: params.CONTROLLER_SSH_KEY, variable: 'controller_ssh_key_path'), file(credentialsId: params.WORKER_SSH_KEY, variable: 'worker_ssh_key_path')]) {
                     echo 'Running make_server Ansible playbook on workers...'
-                    env.WORKER_SSH_KEY_PATH = worker_ssh_key_path
-                    env.INFISCAL_API_URL = params.INFISCAL_API_URL
-                    env.INFISCAL_API_KEY = params.INFISCAL_API_KEY
-                    env.INFISCAL_WORKSPACE_ID = params.INFISCAL_WORKSPACE_ID
-                    env.INFISCAL_ENVIRONMENT = params.INFISCAL_ENVIRONMENT
-                    env.GIT_BRANCH = params.BRANCH
-                    env.DEBUG = params.DEBUG
+                    setup_env_vars(worker_ssh_key_path=worker_ssh_key_path)
                     script {
                         sh ".venv/bin/ansible-playbook 'ansible/playbooks/make_worker.yml' -l 'k8s-worker'"
                     }
