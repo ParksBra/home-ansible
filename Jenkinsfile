@@ -73,7 +73,7 @@ pipeline {
         }
         stage('make-controller') {
             steps {
-                withCredentials([file(credentialsId: params.CONTROLLER_SSH_KEY, variable: 'controller_ssh_key_path'), file(credentialsId: params.WORKER_SSH_KEY, variable: 'worker_ssh_key_path')]) {
+                withCredentials([sshUserPrivateKey(credentialsId: params.CONTROLLER_SSH_KEY, keyFileVariable: 'controller_ssh_key_path'), sshUserPrivateKey(credentialsId: params.WORKER_SSH_KEY, keyFileVariable: 'worker_ssh_key_path')]) {
                     echo 'Running make_server Ansible playbook on controller...'
                     setup_env_vars(controller_ssh_key_path=controller_ssh_key_path)
                     script {
@@ -84,7 +84,7 @@ pipeline {
         }
         stage('make-workers') {
             steps {
-                withCredentials([file(credentialsId: params.CONTROLLER_SSH_KEY, variable: 'controller_ssh_key_path'), file(credentialsId: params.WORKER_SSH_KEY, variable: 'worker_ssh_key_path')]) {
+                withCredentials([sshUserPrivateKey(credentialsId: params.CONTROLLER_SSH_KEY, keyFileVariable: 'controller_ssh_key_path'), sshUserPrivateKey(credentialsId: params.WORKER_SSH_KEY, keyFileVariable: 'worker_ssh_key_path')]) {
                     echo 'Running make_server Ansible playbook on workers...'
                     setup_env_vars(worker_ssh_key_path=worker_ssh_key_path)
                     script {
