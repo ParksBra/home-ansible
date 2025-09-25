@@ -31,7 +31,7 @@ pipeline {
         )
         string(
             name: 'INFISCAL_PROJECT_ID',
-            defaultValue: ''
+            defaultValue: '',
             description: 'Infisical project ID, normally UUID'
         )
         string(

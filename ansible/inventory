@@ -1,11 +1,9 @@
 [all]
 home-k8s-controller
 home-k8s-worker-0
-home-k8s-worker-1
 
 [k8s-controller]
 home-k8s-controller
 
 [k8s-worker]
 home-k8s-worker-0
-home-k8s-worker-1
