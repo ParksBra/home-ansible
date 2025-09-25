@@ -36,7 +36,7 @@ pipeline {
         )
         string(
             name: 'INFISCAL_ENVIRONMENT',
-            defaultValue: 'prod'
+            defaultValue: 'prod',
             description: 'Infisical environment, e.g. prod, dev, staging'
         )
         booleanParam(
