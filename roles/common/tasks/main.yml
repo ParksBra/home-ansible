@@ -15,5 +15,5 @@
 - name: configure patching
   include_tasks: configure_patching.yml
 
-- name: configure mounting points
-  include_tasks: mount_disks.yml
+# - name: configure mounting points
+#   include_tasks: mount_disks.yml
