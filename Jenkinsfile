@@ -58,9 +58,6 @@ pipeline {
             description: 'Enable debug logging and display of secrets'
         )
     }
-    triggers {
-        // pollSCM('* * * * *')
-    }
 
     stages {
         stage('setup-environment') {
