@@ -1,0 +1,2 @@
+- name: init k8s cluster
+  include_tasks: k8s_init.yml

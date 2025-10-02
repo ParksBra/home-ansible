@@ -1,6 +1,6 @@
 - name: install kubelet
   apt:
-    name: kubelet=1.33.4-1.1
+    name: "kubelet={{ k8s_version }}"
     state: present
     force: true
   become: true
@@ -13,7 +13,7 @@
 
 - name: install kubeadm
   apt:
-    name: kubeadm=1.33.4-1.1
+    name: "kubeadm={{ k8s_version }}"
     state: present
     force: true
   become: true
@@ -26,7 +26,7 @@
 
 - name: install kubectl
   apt:
-    name: kubectl=1.33.4-1.1
+    name: "kubectl={{ k8s_version }}"
     state: present
     force: true
   become: true

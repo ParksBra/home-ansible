@@ -4,6 +4,7 @@ ansible_user: "ansible"
 ansible_group: "ansible"
 
 k8s_service_cidr: "10.96.0.0/12"
-k8s_version: "v1.34.1"
+k8s_base_version: "1.34"
+k8s_version: "1.34.1"
 k8s_pod_network_cidr: "10.244.0.0/16"
 k8s_container_runtime: "containerd"
