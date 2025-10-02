@@ -1,5 +1,7 @@
-def setup_env_vars(controller_ssh_key_path='', worker_ssh_key_path='') {
+def setup_env_vars(controller_ssh_user='', controller_ssh_key_path='', worker_ssh_user='', worker_ssh_key_path='') {
+    env.CONTROLLER_SSH_USER = controller_ssh_user
     env.CONTROLLER_SSH_KEY_PATH = controller_ssh_key_path
+    env.WORKER_SSH_USER = worker_ssh_user
     env.WORKER_SSH_KEY_PATH = worker_ssh_key_path
     env.INFISCAL_API_URL = params.INFISCAL_API_URL
     env.INFISCAL_API_KEY = params.INFISCAL_API_KEY
@@ -73,9 +75,9 @@ pipeline {
         }
         stage('make-controller') {
             steps {
-                withCredentials([sshUserPrivateKey(credentialsId: params.CONTROLLER_SSH_KEY, keyFileVariable: 'controller_ssh_key_path'), sshUserPrivateKey(credentialsId: params.WORKER_SSH_KEY, keyFileVariable: 'worker_ssh_key_path')]) {
+                withCredentials([sshUserPrivateKey(credentialsId: params.CONTROLLER_SSH_KEY, usernameVariable: 'controller_ssh_user', keyFileVariable: 'controller_ssh_key_path')]) {
                     echo 'Running make_server Ansible playbook on controller...'
-                    setup_env_vars(controller_ssh_key_path=controller_ssh_key_path)
+                    setup_env_vars(controller_ssh_user=controller_ssh_user, controller_ssh_key_path=controller_ssh_key_path)
                     script {
                         sh ".venv/bin/ansible-playbook 'playbooks/make_controller.yml' -l 'k8s-controller'"
                     }
@@ -84,9 +86,9 @@ pipeline {
         }
         stage('make-workers') {
             steps {
-                withCredentials([sshUserPrivateKey(credentialsId: params.CONTROLLER_SSH_KEY, keyFileVariable: 'controller_ssh_key_path'), sshUserPrivateKey(credentialsId: params.WORKER_SSH_KEY, keyFileVariable: 'worker_ssh_key_path')]) {
+                withCredentials([sshUserPrivateKey(credentialsId: params.WORKER_SSH_KEY, usernameVariable: 'worker_ssh_user', keyFileVariable: 'worker_ssh_key_path')]) {
                     echo 'Running make_server Ansible playbook on workers...'
-                    setup_env_vars(worker_ssh_key_path=worker_ssh_key_path)
+                    setup_env_vars(worker_ssh_user=worker_ssh_user, worker_ssh_key_path=worker_ssh_key_path)
                     script {
                         sh ".venv/bin/ansible-playbook 'playbooks/make_worker.yml' -l 'k8s-worker'"
                     }
