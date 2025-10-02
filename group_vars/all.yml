@@ -11,5 +11,5 @@ k8s_container_runtime: "containerd"
 k8s_container_runtime_socket: "/var/run/containerd/containerd.sock"
 k8s_controller_ip: "{{ hostvars[groups['k8s-controller'][0]]['ansible_default_ipv4'].address | default(groups['k8s-controller'][0]) }}"
 
-infiscal_workspace_id: "{{ lookup('env', 'INFISCAL_WORKSPACE_ID')) }}"
-infiscal_environment: "{{ lookup('env', 'INFISCAL_ENVIRONMENT')) }}"
+infiscal_workspace_id: "{{ lookup('env', 'INFISCAL_WORKSPACE_ID') }}"
+infiscal_environment: "{{ lookup('env', 'INFISCAL_ENVIRONMENT') }}"
