@@ -43,9 +43,9 @@ pipeline {
             description: 'Infisical key for accessing secret values'
         )
         string(
-            name: 'INFISCAL_PROJECT_ID',
+            name: 'INFISCAL_WORKSPACE_ID',
             defaultValue: '',
-            description: 'Infisical project ID, normally UUID'
+            description: 'Infisical workspace ID, normally UUID'
         )
         string(
             name: 'INFISCAL_ENVIRONMENT',
