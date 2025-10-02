@@ -76,7 +76,7 @@ pipeline {
                     echo 'Running make_server Ansible playbook on controller...'
                     setup_env_vars(controller_ssh_user=controller_ssh_user, controller_ssh_key_path=controller_ssh_key_path)
                     script {
-                        sh ".venv/bin/ansible-playbook 'playbooks/make_controller.yml' -l 'k8s-controller'"
+                        sh ".venv/bin/ansible-playbook 'playbooks/make_controller.yml' -l 'k8s-controller' -vv"
                     }
                 }
             }
@@ -87,7 +87,7 @@ pipeline {
                     echo 'Running make_server Ansible playbook on workers...'
                     setup_env_vars(worker_ssh_user=worker_ssh_user, worker_ssh_key_path=worker_ssh_key_path)
                     script {
-                        sh ".venv/bin/ansible-playbook 'playbooks/make_worker.yml' -l 'k8s-worker'"
+                        sh ".venv/bin/ansible-playbook 'playbooks/make_worker.yml' -l 'k8s-worker' -vv"
                     }
                 }
             }
