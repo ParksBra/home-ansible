@@ -20,8 +20,8 @@
   shell: |
     kubeadm join --token {{ k8s_cluster_token }} \
                 --discovery-token-unsafe-skip-ca-verification \
-                --cri-socket=/var/run/{{ k8s_container_runtime }}/{{ k8s_container_runtime }}.sock \
-                {{ master_ip }}:6443
+                --cri-socket={{ k8s_container_runtime_socket }} \
+                {{ k8s_controller_ip }}:6443
   register: join_cluster
   environment:
     no_proxy: "$no_proxy,.svc,.svc.cluster.local"
