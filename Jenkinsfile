@@ -1,11 +1,9 @@
-def setup_env_vars(
-    Map data
-    ) {
+def setup_env_vars(Map data) {
     def ssh_user = data.get('ssh_user', '')
     def ssh_key_path = data.get('ssh_key_path', '')
     def infisical_identity_client_id = data.get('infisical_identity_client_id', '')
     def infisical_identity_secret = data.get('infisical_identity_secret', '')
-    
+
     env.SSH_USER = ssh_user
     env.SSH_KEY_PATH = ssh_key_path
     env.GIT_BRANCH = params.BRANCH
