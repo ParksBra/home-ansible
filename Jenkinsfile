@@ -59,7 +59,7 @@ pipeline {
         )
         credentials(
             name: 'INFISICAL_IDENTITY',
-            credentialsType: 'usernamepassword',
+            credentialType: 'usernamepassword',
             description: 'Infisical service identity for universal authentication'
         )
     }
