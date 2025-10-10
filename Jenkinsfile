@@ -26,13 +26,11 @@ pipeline {
         credentials(
             name: 'CONTROLLER_SSH_KEY',
             credentialType: 'BasicSSHUserPrivateKey',
-            includeUser: true,
             description: 'SSH key for accessing the controller hosts'
         )
         credentials(
             name: 'WORKER_SSH_KEY',
             credentialType: 'BasicSSHUserPrivateKey',
-            includeUser: true,
             description: 'SSH key for accessing the worker hosts'
         )
         string(
