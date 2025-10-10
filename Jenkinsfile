@@ -17,23 +17,20 @@ pipeline {
         gitParameter(
             type: 'BRANCH',
             name: 'BRANCH',
-            required: true,
             description: 'Choose a branch to checkout',
             branchFilter: 'origin/(.*)',
             defaultValue: 'main',
             selectedValue: 'DEFAULT',
             sortMode: 'DESCENDING_SMART'
         )
-        credentialsId(
+        credentials(
             name: 'CONTROLLER_SSH_KEY',
-            required: true,
             context: 'BasicSSHUserPrivateKey',
             includeUser: true,
             description: 'SSH key for accessing the controller hosts'
         )
-        credentialsId(
+        credentials(
             name: 'WORKER_SSH_KEY',
-            required: true,
             context: 'BasicSSHUserPrivateKey',
             includeUser: true,
             description: 'SSH key for accessing the worker hosts'
@@ -44,17 +41,14 @@ pipeline {
         )
         password(
             name: 'INFISCAL_API_KEY',
-            required: true,
             description: 'Infisical key for accessing secret values'
         )
         string(
             name: 'INFISCAL_WORKSPACE_ID',
-            required: true,
             description: 'Infisical workspace ID, normally UUID'
         )
         string(
             name: 'INFISCAL_ENVIRONMENT',
-            required: true,
             defaultValue: 'prod',
             description: 'Infisical environment, e.g. prod, dev, staging'
         )
