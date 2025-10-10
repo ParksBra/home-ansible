@@ -9,8 +9,8 @@
     name: "{{ inventory_hostname }}"
   when: inventory_hostname is defined
 
-- name: create users and groups
-  include_tasks: configure_user_group.yml
+# - name: create users and groups
+#   include_tasks: configure_user_group.yml
 
 - name: configure patching
   include_tasks: configure_patching.yml
