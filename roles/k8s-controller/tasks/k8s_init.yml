@@ -21,8 +21,9 @@
     kubeadm init --service-cidr {{ k8s_service_cidr }} \
                   --kubernetes-version v{{ k8s_version }} \
                   --pod-network-cidr {{ k8s_pod_network_cidr }} \
-                  --token {{ k8s_cluster_token }} \
-                  --apiserver-advertise-address {{ k8s_controller_ip }} \
+                  --token {{ lookup('infisical.vault.read_secrets', secret_name='k8s-discovery-token' project_id=infiscal_project_id, env_slug=infiscal_environment_slug, url=infiscal_url) }} \
+                  --apiserver-advertise-address {{ k8s_apiserver_ip }} \
+                  --apiserver-bind-port {{ k8s_apiserver_port }} \
                   --cri-socket={{ k8s_container_runtime_socket }} \
                   {{ k8s_kubeadm_opts }} \
                   {{ k8s_init_opts }}
@@ -40,7 +41,7 @@
   copy:
     src: "/etc/kubernetes/admin.conf"
     dest: ".kube/config"
-    owner: "{{ ansible_user | default(ansible_user_id) }}"
-    group: "{{ ansible_user | default(ansible_user_id) }}"
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
     mode: 0700
     remote_src: true

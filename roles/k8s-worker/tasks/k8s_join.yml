@@ -1,29 +1,15 @@
 - name: Reset Kubernetes component
-  shell: "kubeadm reset --force --cri-socket=/var/run/{{ container_runtime }}/{{ container_runtime }}.sock"
+  shell: "kubeadm reset --force --cri-socket={{ k8s_container_runtime_socket }}"
   register: reset_cluster
-
-- name: get join token
-  include_tasks: ../../common/tasks/get_secret.yml
-  vars:
-    secret_name: k8s-discovery-token
-
-- name: set join token
-  set_fact:
-    k8s_cluster_token: "{{ secret_value }}"
-
-- name: debug secret
-  debug:
-    var: k8s_cluster_token
 
 - name: Join to Kubernetes cluster
   when: reset_cluster is succeeded
   shell: |
-    kubeadm join --token {{ k8s_cluster_token }} \
+    kubeadm join --token {{ lookup('infisical.vault.read_secrets', secret_name='k8s-discovery-token' project_id=infiscal_project_id, env_slug=infiscal_environment_slug, url=infiscal_url) }} \
                 --discovery-token-unsafe-skip-ca-verification \
                 --cri-socket={{ k8s_container_runtime_socket }} \
-                {{ k8s_controller_ip }}:6443
+                {{ k8s_kubeadm_opts }} \
+                {{ k8s_apiserver_ip }}:{{ k8s_apiserver_port }}
   register: join_cluster
   environment:
     no_proxy: "$no_proxy,.svc,.svc.cluster.local"
-  notify:
-    - Recreate kube-dns
