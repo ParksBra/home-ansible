@@ -1,11 +1,7 @@
-def setup_env_vars(Map data) {
-    def ssh_user = data.get('ssh_user', '')
-    def ssh_key_path = data.get('ssh_key_path', '')
-    def infisical_identity_client_id = data.get('infisical_identity_client_id', '')
-    def infisical_identity_secret = data.get('infisical_identity_secret', '')
-
+def setup_env_vars() {
     env.SSH_USER = ssh_user
     env.SSH_KEY_PATH = ssh_key_path
+
     env.GIT_BRANCH = params.BRANCH
     env.DEBUG = params.DEBUG
 
@@ -85,14 +81,9 @@ pipeline {
         }
         stage('make-controller') {
             steps {
-                withCredentials([sshUserPrivateKey(credentialsId: params.CONTROLLER_SSH_KEY, usernameVariable: 'controller_ssh_user', keyFileVariable: 'controller_ssh_key_path'), usernamePassword(credentialsId: params.INFISICAL_IDENTITY, usernameVariable: 'infisical_identity_client_id', passwordVariable: 'infisical_identity_secret')]) {
+                withCredentials([sshUserPrivateKey(credentialsId: params.CONTROLLER_SSH_KEY, usernameVariable: 'ssh_user', keyFileVariable: 'ssh_key_path'), usernamePassword(credentialsId: params.INFISICAL_IDENTITY, usernameVariable: 'infisical_identity_client_id', passwordVariable: 'infisical_identity_secret')]) {
                     echo 'Running make_server Ansible playbook on controller...'
-                    setup_env_vars(
-                        ssh_user: controller_ssh_user,
-                        ssh_key_path: controller_ssh_key_path,
-                        infisical_identity_client_id: infisical_identity_client_id,
-                        infisical_identity_secret: infisical_identity_secret
-                        )
+                    setup_env_vars()
                     script {
                         sh ".venv/bin/ansible-playbook 'playbooks/make_controller.yml' -l 'k8s_controller' ${ansible_opts}"
                     }
@@ -101,14 +92,9 @@ pipeline {
         }
         stage('make-workers') {
             steps {
-                withCredentials([sshUserPrivateKey(credentialsId: params.WORKER_SSH_KEY, usernameVariable: 'worker_ssh_user', keyFileVariable: 'worker_ssh_key_path'), usernamePassword(credentialsId: params.INFISICAL_IDENTITY, usernameVariable: 'infisical_identity_client_id', passwordVariable: 'infisical_identity_secret')]) {
+                withCredentials([sshUserPrivateKey(credentialsId: params.WORKER_SSH_KEY, usernameVariable: 'ssh_user', keyFileVariable: 'ssh_key_path'), usernamePassword(credentialsId: params.INFISICAL_IDENTITY, usernameVariable: 'infisical_identity_client_id', passwordVariable: 'infisical_identity_secret')]) {
                     echo 'Running make_server Ansible playbook on workers...'
-                    setup_env_vars(
-                        ssh_user: worker_ssh_user,
-                        ssh_key_path: worker_ssh_key_path,
-                        infisical_identity_client_id: infisical_identity_client_id,
-                        infisical_identity_secret: infisical_identity_secret
-                        )
+                    setup_env_vars()
                     script {
                         sh ".venv/bin/ansible-playbook 'playbooks/make_worker.yml' -l 'k8s_worker' ${ansible_opts}"
                     }
