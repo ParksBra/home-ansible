@@ -17,13 +17,12 @@ def setup_env_vars(
     env.INFISICAL_AUTH_METHOD = 'universal-auth'
 
     def ansible_opts_list = []
+    env.ANSIBLE_DISPLAY_SKIPPED_HOSTS = 'False'
+    env.ANSIBLE_DEBUG = 'False'
     if (params.DEBUG.toBoolean()) {
         ansible_opts_list.add('-vv')
         env.ANSIBLE_DISPLAY_SKIPPED_HOSTS = 'True'
         env.ANSIBLE_DEBUG = 'True'
-    } else {
-        env.ANSIBLE_DISPLAY_SKIPPED_HOSTS = 'False'
-        env.ANSIBLE_DEBUG = 'False'
     }
     ansible_opts = ansible_opts_list.join(' ')
 
