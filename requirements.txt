@@ -8,3 +8,4 @@ packaging==25.0
 pycparser==2.22
 PyYAML==6.0.2
 resolvelib==1.0.1
+infisicalsdk==1.0.11
