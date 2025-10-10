@@ -20,7 +20,7 @@ def setup_env_vars(
     env.ANSIBLE_DISPLAY_SKIPPED_HOSTS = 'False'
     env.ANSIBLE_DEBUG = 'False'
     if (params.DEBUG.toBoolean()) {
-        ansible_opts_list.add('-vv')
+        ansible_opts_list.add('-v')
         env.ANSIBLE_DISPLAY_SKIPPED_HOSTS = 'True'
         env.ANSIBLE_DEBUG = 'True'
     }
