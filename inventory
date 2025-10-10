@@ -2,8 +2,8 @@
 home-k8s-controller
 home-k8s-worker-0
 
-[k8s-controller]
+[k8s_controller]
 home-k8s-controller
 
-[k8s-worker]
+[k8s_worker]
 home-k8s-worker-0

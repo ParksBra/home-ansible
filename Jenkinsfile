@@ -17,21 +17,26 @@ pipeline {
         gitParameter(
             type: 'BRANCH',
             name: 'BRANCH',
+            required: true,
             description: 'Choose a branch to checkout',
             branchFilter: 'origin/(.*)',
             defaultValue: 'main',
             selectedValue: 'DEFAULT',
             sortMode: 'DESCENDING_SMART'
         )
-        string(
+        credentialsId(
             name: 'CONTROLLER_SSH_KEY',
-            defaultValue: 'ansible-ssh-key',
-            description: 'Name of stored SSH key secret file for accessing the target servers'
+            required: true,
+            context: 'BasicSSHUserPrivateKey',
+            includeUser: true,
+            description: 'SSH key for accessing the controller hosts'
         )
-        string(
+        credentialsId(
             name: 'WORKER_SSH_KEY',
-            defaultValue: 'ansible-ssh-key',
-            description: 'Name of stored SSH key secret file for accessing the target servers'
+            required: true,
+            context: 'BasicSSHUserPrivateKey',
+            includeUser: true,
+            description: 'SSH key for accessing the worker hosts'
         )
         string(
             name: 'INFISCAL_API_URL',
@@ -39,16 +44,17 @@ pipeline {
         )
         password(
             name: 'INFISCAL_API_KEY',
-            defaultValue: 'password',
+            required: true,
             description: 'Infisical key for accessing secret values'
         )
         string(
             name: 'INFISCAL_WORKSPACE_ID',
-            defaultValue: '',
+            required: true,
             description: 'Infisical workspace ID, normally UUID'
         )
         string(
             name: 'INFISCAL_ENVIRONMENT',
+            required: true,
             defaultValue: 'prod',
             description: 'Infisical environment, e.g. prod, dev, staging'
         )
@@ -76,7 +82,7 @@ pipeline {
                     echo 'Running make_server Ansible playbook on controller...'
                     setup_env_vars(controller_ssh_user=controller_ssh_user, controller_ssh_key_path=controller_ssh_key_path)
                     script {
-                        sh ".venv/bin/ansible-playbook 'playbooks/make_controller.yml' -l 'k8s-controller' -vv"
+                        sh ".venv/bin/ansible-playbook 'playbooks/make_controller.yml' -l 'k8s_controller' {% if env.DEBUG %}-vv{% endif %}"
                     }
                 }
             }
@@ -87,7 +93,7 @@ pipeline {
                     echo 'Running make_server Ansible playbook on workers...'
                     setup_env_vars(worker_ssh_user=worker_ssh_user, worker_ssh_key_path=worker_ssh_key_path)
                     script {
-                        sh ".venv/bin/ansible-playbook 'playbooks/make_worker.yml' -l 'k8s-worker' -vv"
+                        sh ".venv/bin/ansible-playbook 'playbooks/make_worker.yml' -l 'k8s_worker' {% if env.DEBUG %}-vv{% endif %}"
                     }
                 }
             }

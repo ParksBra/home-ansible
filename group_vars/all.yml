@@ -1,7 +1,4 @@
-service_user: "kubernetes"
-service_group: "kubernetes"
-ansible_user: "ansible"
-ansible_group: "ansible"
+debug: "{{ lookup('env', 'DEBUG') | default(false) | bool }}"
 
 k8s_service_cidr: "10.96.0.0/12"
 k8s_base_version: "1.34"
@@ -11,5 +8,7 @@ k8s_container_runtime: "containerd"
 k8s_container_runtime_socket: "/var/run/containerd/containerd.sock"
 k8s_controller_ip: "{{ hostvars[groups['k8s-controller'][0]]['ansible_default_ipv4'].address | default(groups['k8s-controller'][0]) }}"
 
+infiscal_api_url: "{{ lookup('env', 'INFISCAL_API_URL') }}"
+infiscal_api_key: "{{ lookup('env', 'INFISCAL_API_KEY') }}"
 infiscal_workspace_id: "{{ lookup('env', 'INFISCAL_WORKSPACE_ID') }}"
 infiscal_environment: "{{ lookup('env', 'INFISCAL_ENVIRONMENT') }}"
