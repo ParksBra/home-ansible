@@ -15,6 +15,18 @@ def setup_env_vars(
     env.INFISICAL_UNIVERSAL_AUTH_CLIENT_ID = infisical_identity_client_id
     env.INFISICAL_UNIVERSAL_AUTH_CLIENT_SECRET = infisical_identity_secret
     env.INFISICAL_AUTH_METHOD = 'universal-auth'
+
+    ansible_opts_list = []
+    if (params.DEBUG.toBoolean()) {
+        ansible_opts_list.add('-vv')
+        env.ANSIBLE_DISPLAY_SKIPPED_HOSTS = 'True'
+        env.ANSIBLE_DEBUG = 'True'
+    } else {
+        env.ANSIBLE_DISPLAY_SKIPPED_HOSTS = 'False'
+        env.ANSIBLE_DEBUG = 'False'
+    }
+    ansible_opts = ansible_opts_list.join(' ')
+
 }
 
 pipeline {
@@ -87,7 +99,7 @@ pipeline {
                         infisical_identity_secret=infisical_identity_secret
                         )
                     script {
-                        sh ".venv/bin/ansible-playbook 'playbooks/make_controller.yml' -l 'k8s_controller' {% if env.DEBUG %}-vv{% endif %}"
+                        sh ".venv/bin/ansible-playbook 'playbooks/make_controller.yml' -l 'k8s_controller' ${ansible_opts}"
                     }
                 }
             }
@@ -103,7 +115,7 @@ pipeline {
                         infisical_identity_secret=infisical_identity_secret
                         )
                     script {
-                        sh ".venv/bin/ansible-playbook 'playbooks/make_worker.yml' -l 'k8s_worker' {% if env.DEBUG %}-vv{% endif %}"
+                        sh ".venv/bin/ansible-playbook 'playbooks/make_worker.yml' -l 'k8s_worker' ${ansible_opts}"
                     }
                 }
             }
