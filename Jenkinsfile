@@ -25,7 +25,7 @@ def setup_env_vars(
         env.ANSIBLE_DISPLAY_SKIPPED_HOSTS = 'False'
         env.ANSIBLE_DEBUG = 'False'
     }
-    def ansible_opts = ansible_opts_list.join(' ')
+    ansible_opts = ansible_opts_list.join(' ')
 
 }
 
@@ -48,12 +48,12 @@ pipeline {
         )
         credentials(
             name: 'CONTROLLER_SSH_KEY',
-            credentialType: 'sshkey',
+            credentialType: 'sshUserPrivateKey',
             description: 'SSH key for accessing the controller hosts'
         )
         credentials(
             name: 'WORKER_SSH_KEY',
-            credentialType: 'sshkey',
+            credentialType: 'sshUserPrivateKey',
             description: 'SSH key for accessing the worker hosts'
         )
         string(
@@ -71,7 +71,7 @@ pipeline {
         )
         credentials(
             name: 'INFISICAL_IDENTITY',
-            credentialType: 'usernamepassword',
+            credentialType: 'usernamePassword',
             description: 'Infisical service identity for universal authentication'
         )
     }
