@@ -1,8 +1,8 @@
 ---
-- hosts: k8s-controller
+- hosts: k8s_controller
   roles:
     - common
-    - k8s-base
-    - k8s-controller
+    - k8s_base
+    - k8s_controller
   become: true
   become_user: root
