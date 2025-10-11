@@ -1,5 +1,5 @@
 - name: Reset Kubernetes component
-  shell: "kubeadm reset --force --cri-socket={{ k8s_container_runtime_socket }}"
+  shell: "kubeadm reset --force --cri-socket=unix://{{ k8s_container_runtime_socket }}"
   register: reset_cluster
 
 - name: Join to Kubernetes cluster
@@ -7,7 +7,7 @@
   shell: |
     kubeadm join --token {{ lookup('infisical.vault.read_secrets', secret_name='k8s-discovery-token', project_id=infiscal_project_id, env_slug=infiscal_environment_slug, url=infiscal_url) }} \
                 --discovery-token-unsafe-skip-ca-verification \
-                --cri-socket={{ k8s_container_runtime_socket }} \
+                --cri-socket=unix://{{ k8s_container_runtime_socket }} \
                 {{ k8s_kubeadm_opts }} \
                 {{ k8s_apiserver_ip }}:{{ k8s_apiserver_port }}
   register: join_cluster
