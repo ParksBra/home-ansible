@@ -8,7 +8,7 @@
     kubeadm init --service-cidr {{ k8s_service_cidr }} \
                   --kubernetes-version v{{ k8s_version }} \
                   --pod-network-cidr {{ k8s_pod_network_cidr }} \
-                  --token {{ lookup('infisical.vault.read_secrets', secret_name='k8s-discovery-token', project_id=infiscal_project_id, env_slug=infiscal_environment_slug, url=infiscal_url) }} \
+                  --token {{ lookup('infisical.vault.read_secrets', secret_name='k8s-discovery-token', project_id=infiscal_project_id, env_slug=infiscal_environment_slug, url=infiscal_url).value }} \
                   --apiserver-advertise-address {{ k8s_apiserver_ip }} \
                   --apiserver-bind-port {{ k8s_apiserver_port }} \
                   --cri-socket=unix://{{ k8s_container_runtime_socket }} \

@@ -5,7 +5,7 @@
 - name: Join to Kubernetes cluster
   when: reset_cluster is succeeded
   shell: |
-    kubeadm join --token {{ lookup('infisical.vault.read_secrets', secret_name='k8s-discovery-token', project_id=infiscal_project_id, env_slug=infiscal_environment_slug, url=infiscal_url) }} \
+    kubeadm join --token {{ lookup('infisical.vault.read_secrets', secret_name='k8s-discovery-token', project_id=infiscal_project_id, env_slug=infiscal_environment_slug, url=infiscal_url).value }} \
                 --discovery-token-unsafe-skip-ca-verification \
                 --cri-socket=unix://{{ k8s_container_runtime_socket }} \
                 {{ k8s_kubeadm_opts }} \
