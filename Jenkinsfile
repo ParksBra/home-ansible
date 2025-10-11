@@ -10,7 +10,7 @@ def setup_env_vars(ssh_user, ssh_key_path, infisical_identity_client_id, infisic
     env.INFISCAL_ENVIRONMENT = params.INFISCAL_ENVIRONMENT_SLUG
     env.INFISICAL_UNIVERSAL_AUTH_CLIENT_ID = infisical_identity_client_id
     env.INFISICAL_UNIVERSAL_AUTH_CLIENT_SECRET = infisical_identity_secret
-    env.INFISICAL_AUTH_METHOD = 'universal-auth'
+    env.INFISICAL_AUTH_METHOD = 'universal_auth'
 
     def ansible_opts_list = []
     if (params.DEBUG.toBoolean()) {
