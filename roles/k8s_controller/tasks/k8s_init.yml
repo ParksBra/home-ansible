@@ -24,7 +24,8 @@
     state: directory
 
 - name: Copy admin.conf to Home directory
-  when: init_cluster is succeeded
+  when: init_k8s_cluster.rc == 0
+  become: true
   copy:
     src: "/etc/kubernetes/admin.conf"
     dest: ".kube/config"
