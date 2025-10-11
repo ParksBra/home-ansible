@@ -20,6 +20,12 @@
     state: present
   become: true
 
+- name: ensure rpi-swap is removed
+  apt:
+    name: rpi-swap
+    state: absent
+  become: true
+
 - name: disable swap
   service:
     name: dphys-swapfile
