@@ -24,6 +24,7 @@
   register: init_k8s_cluster
   environment:
     no_proxy: "$no_proxy,.svc,.svc.cluster.local"
+  no_log: "{{ not debug }}"
 
 - name: Create user k8s directory
   when: init_k8s_cluster.rc == 0
