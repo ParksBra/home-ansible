@@ -1,0 +1,2 @@
+- name: reset k8s
+  include_tasks: k8s_reset.yml
