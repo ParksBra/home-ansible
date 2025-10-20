@@ -6,3 +6,6 @@
 
 - name: install container dependencies
   include_tasks: install_k8s_dependencies.yml
+
+- name: install kubernetes packages
+  include_tasks: install_k8s.yml
