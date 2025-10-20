@@ -15,9 +15,6 @@
     enabled: true
     state: started
 
-- name: configure docker
-  include_tasks: "configure_docker.yml"
-
 - name: set k8s_container_runtime_socket
   set_fact:
     k8s_container_runtime_socket: "/run/cri-dockerd.sock"

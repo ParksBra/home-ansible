@@ -1,2 +1,0 @@
-- name: install and configure docker
-  include_tasks: install_docker.yml
