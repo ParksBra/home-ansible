@@ -1,0 +1,3 @@
+- name: Reload cgroup configs
+  include_tasks: reload_cgroup_configs.yml
+  listen: cgroup_updated
