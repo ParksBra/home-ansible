@@ -10,9 +10,20 @@
     state: absent
   become: true
 
-- name: disable swap
+- name: disable swap service
   service:
     name: dphys-swapfile
-    enabled: no
+    enabled: false
+    masked: true
     state: stopped
+  become: true
+
+- name: mask swap in systemd
+  systemd:
+    name: dev-zram0.swap
+    masked: yes
+  become: true
+
+- name: disable swap
+  shell: swapoff --all
   become: true
