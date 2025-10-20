@@ -39,12 +39,12 @@ pipeline {
         )
         credentials(
             name: 'CONTROLLER_SSH_KEY',
-            credentialType: 'sshUserPrivateKey',
+            credentialType: 'SSH Username with private key',
             description: 'SSH key for accessing the controller hosts'
         )
         credentials(
             name: 'WORKER_SSH_KEY',
-            credentialType: 'sshUserPrivateKey',
+            credentialType: 'SSH Username with private key',
             description: 'SSH key for accessing the worker hosts'
         )
         string(
@@ -62,7 +62,7 @@ pipeline {
         )
         credentials(
             name: 'INFISICAL_IDENTITY',
-            credentialType: 'usernamePassword',
+            credentialType: 'Username with password',
             description: 'Infisical service identity for universal authentication'
         )
     }
