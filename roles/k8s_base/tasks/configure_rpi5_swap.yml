@@ -1,0 +1,18 @@
+- name: install common swap package
+  apt:
+    name: dphys-swapfile
+    state: present
+  become: true
+
+- name: ensure rpi-swap is removed
+  apt:
+    name: rpi-swap
+    state: absent
+  become: true
+
+- name: disable swap
+  service:
+    name: dphys-swapfile
+    enabled: no
+    state: stopped
+  become: true

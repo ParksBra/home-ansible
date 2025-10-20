@@ -1,34 +1,8 @@
-- name: enable cpuset cgroup
-  shell: 'sed -i.bak "/cgroup_enable=cpuset/!s/$/ cgroup_enable=cpuset/" /boot/firmware/cmdline.txt'
-  become: true
+- name: configure cgroups
+  include_tasks: configure_rpi5_cgroups.yml
 
-- name: enable memory cgroup
-  shell: 'sed -i "/cgroup_memory=1/!s/$/ cgroup_memory=1/" /boot/firmware/cmdline.txt'
-  become: true
+- name: configure networking
+  include_tasks: configure_rpi5_networking.yml
 
-- name: enable cgroup memory
-  shell: 'sed -i "/cgroup_enable=memory/!s/$/ cgroup_enable=memory/" /boot/firmware/cmdline.txt'
-  become: true
-
-- name: enable ipv4 forwarding
-  shell: 'sed -i "/net.ipv4.ip_forward=1/!s/$/ net.ipv4.ip_forward=1/" /etc/sysctl.d/98-rpi.conf'
-  become: true
-
-- name: install common swap package
-  apt:
-    name: dphys-swapfile
-    state: present
-  become: true
-
-- name: ensure rpi-swap is removed
-  apt:
-    name: rpi-swap
-    state: absent
-  become: true
-
-- name: disable swap
-  service:
-    name: dphys-swapfile
-    enabled: no
-    state: stopped
-  become: true
+- name: configure swap
+  include_tasks: configure_rpi5_swap.yml
