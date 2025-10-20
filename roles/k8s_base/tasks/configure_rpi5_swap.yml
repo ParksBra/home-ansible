@@ -21,7 +21,7 @@
 - name: mask swap in systemd
   systemd:
     name: dev-zram0.swap
-    masked: yes
+    masked: true
   become: true
 
 - name: disable swap
