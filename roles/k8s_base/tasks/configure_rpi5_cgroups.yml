@@ -3,12 +3,12 @@
   become: true
   notify: reboot
 
-- name: enable cgroup memory
+- name: enable memory cgroup
   shell: "sed -i -e 's/ cgroup_memory=0//g' -e 's/ cgroup_disable=memory//g' -e '/cgroup_enable=memory/!s/$/ cgroup_enable=memory/' /boot/firmware/cmdline.txt"
   become: true
   notify: reboot
 
-- name: enable cgroup hugetlb
+- name: enable hugetlb cgroup
   shell: "sed -i '/cgroup_enable=hugetlb/!s/$/ cgroup_enable=hugetlb/' /boot/firmware/cmdline.txt"
   become: true
   notify: reboot
