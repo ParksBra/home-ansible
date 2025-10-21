@@ -12,3 +12,6 @@
   shell: "sed -i '/cgroup_enable=hugetlb/!s/$/ cgroup_enable=hugetlb/' /boot/firmware/cmdline.txt"
   become: true
   notify: reboot
+
+- name: run handlers
+  meta: flush_handlers
