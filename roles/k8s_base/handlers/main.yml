@@ -1,3 +1,7 @@
-- name: Reload cgroup configs
-  include_tasks: reload_cgroup_configs.yml
-  listen: cgroup_updated
+- name: reboot host
+  reboot:
+    pre_reboot_delay: 0
+    post_reboot_delay: 5
+    reboot_timeout: 300
+    test_command: whoami
+  listen: reboot
