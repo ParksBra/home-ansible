@@ -1,19 +1,14 @@
 - name: enable cpuset cgroup
-  shell: 'sed -i.bak "/cgroup_enable=cpuset/!s/$/ cgroup_enable=cpuset/" /boot/firmware/cmdline.txt'
+  shell: "sed -i.bak '/cgroup_enable=cpuset/!s/$/ cgroup_enable=cpuset/' /boot/firmware/cmdline.txt"
   become: true
   notify: cgroup_updated
 
 - name: enable cgroup memory
-  shell: 'sed -i "/cgroup_enable=memory/!s/$/ cgroup_enable=memory/" /boot/firmware/cmdline.txt'
+  shell: "sed -i -e 's/cgroup_disable=memory //g' -e '/cgroup_enable=memory/!s/$/ cgroup_enable=memory/' /boot/firmware/cmdline.txt"
   become: true
   notify: cgroup_updated
 
-- name: enable cgroup memory
-  shell: 'sed -i "/cgroup_enable=hugetlb/!s/$/ cgroup_enable=hugetlb/" /boot/firmware/cmdline.txt'
-  become: true
-  notify: cgroup_updated
-
-- name: enable memory cgroup
-  shell: 'sed -i "/cgroup_memory=1/!s/$/ cgroup_memory=1/" /boot/firmware/cmdline.txt'
+- name: enable cgroup hugetlb
+  shell: "sed -i '/cgroup_enable=hugetlb/!s/$/ cgroup_enable=hugetlb/' /boot/firmware/cmdline.txt"
   become: true
   notify: cgroup_updated
