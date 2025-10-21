@@ -1,0 +1,10 @@
+- name: create CNI directory
+  file:
+    path: "{{ k8s_cni_directory }}"
+    state: directory
+
+
+- name: "configure {{ k8s_cni_provider }} CNI"
+  template:
+    src: "{{ k8s_cni_provider }}.yml.j2"
+    dest: "/etc/kubernetes/{{ k8s_cni_provider }}.yml"
