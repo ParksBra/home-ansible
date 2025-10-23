@@ -3,6 +3,3 @@
     name: containerd
     state: present
   become: true
-
-- name: configure CNI
-  include_tasks: configure_cni_calico.yml

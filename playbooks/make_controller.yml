@@ -4,5 +4,6 @@
     - common
     - k8s_base
     - k8s_controller
+    - calico_cni
   become: true
   become_user: root
