@@ -40,7 +40,7 @@
   become: true
   copy:
     src: "/etc/kubernetes/admin.conf"
-    dest: "{{ k8s_kubectl_config_dir }}/config"
+    dest: "{{ k8s_kubectl_config_path }}"
     owner: "{{ ansible_ssh_user }}"
     group: "{{ ansible_ssh_user }}"
     mode: 0700
