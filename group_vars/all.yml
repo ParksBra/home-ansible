@@ -8,7 +8,7 @@ k8s_container_runtime: "containerd"
 k8s_container_runtime_socket: "/var/run/containerd/containerd.sock"
 k8s_cni_calico_version: "3.30.4"
 k8s_cni_directory: "/etc/kubernetes/network"
-k8s_kubectl_config_dir: "/user/{{ ansible_ssh_user }}/.kube"
+k8s_kubectl_config_dir: "/home/{{ ansible_ssh_user }}/.kube"
 k8s_apiserver_ip: "{{ hostvars[groups['k8s_controller'][0]]['ansible_default_ipv4'].address | default(lookup('community.general.dig', groups['k8s_controller'][0] ~ '.local.', fail_on_error=true))}}"
 k8s_apiserver_port: 6443
 k8s_kubeadm_opts: ""
