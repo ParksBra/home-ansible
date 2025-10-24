@@ -66,7 +66,7 @@ pipeline {
                     sh "python3 -m venv ${WORKSPACE}/.venv"
                     sh "${WORKSPACE}/.venv/bin/pip install --upgrade pip"
                     sh "${WORKSPACE}/.venv/bin/pip install -r requirements.txt"
-                    sh "${WORKSPACE}/.venv/bin/python -m ansible-galaxy install -r ${WORKSPACE}/roles/requirements.yml"
+                    sh "${WORKSPACE}/.venv/bin/ansible-galaxy install -r ${WORKSPACE}/roles/requirements.yml"
                 }
             }
         }
@@ -93,7 +93,7 @@ pipeline {
                     echo 'Running make_server Ansible playbook on controller...'
                     setup_env_vars(ssh_user, ssh_key_path, infisical_identity_client_id, infisical_identity_secret)
                     script {
-                        sh "${WORKSPACE}/.venv/bin/python -m ansible-playbook '${WORKSPACE}/playbooks/make_controller.yml' -l 'k8s_controller' ${ansible_opts}"
+                        sh "${WORKSPACE}/.venv/bin/ansible-playbook '${WORKSPACE}/playbooks/make_controller.yml' -l 'k8s_controller' ${ansible_opts}"
                     }
                 }
             }
@@ -104,7 +104,7 @@ pipeline {
                     echo 'Running make_server Ansible playbook on workers...'
                     setup_env_vars(ssh_user, ssh_key_path, infisical_identity_client_id, infisical_identity_secret)
                     script {
-                        sh "${WORKSPACE}/.venv/bin/python -mansible-playbook '${WORKSPACE}/playbooks/make_worker.yml' -l 'k8s_worker' ${ansible_opts}"
+                        sh "${WORKSPACE}/.venv/bin/ansible-playbook '${WORKSPACE}/playbooks/make_worker.yml' -l 'k8s_worker' ${ansible_opts}"
                     }
                 }
             }
