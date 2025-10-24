@@ -1,19 +1,6 @@
-- name: enable {{ item }} cgroup
-  block:
-  - name: enable {{ item }} cgroup
-    shell: "sed -i '/cgroup_enable={{ item }}/!s/$/ cgroup_enable={{ item }}/w {{ temp_directory }}/sed_changes.txt' /boot/firmware/cmdline.txt"
-    become: true
-    notify: reboot
-
-  - name: check if change_log is 0 bytes
-    stat:
-      path: "{{ temp_directory }}/sed_changes.txt"
-    register: change_log
-
-  - name: notify reboot if cpuset cgroup was enabled
-    when: change_log.stat.size > 0
-    notify: reboot
-  with_items:
+- name: enable required cgroups
+  include_tasks: enable_cgroup.yml
+  loop:
     - cpuset
     - memory
     - hugetlb
