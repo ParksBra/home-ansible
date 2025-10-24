@@ -71,8 +71,16 @@ pipeline {
         stage('validate-configuration') {
             steps {
                 echo 'Validating Ansible playbook syntax...'
-                script {
-                    sh '.venv/bin/ansible-lint playbooks/*.yml'
+                try {
+                    script {
+                        sh '.venv/bin/ansible-lint playbooks/*.yml'
+                    }
+                } catch (err) {
+                    echo "Ansible linting validation failed: ${err}"
+                    timeout(time: 2, unit: 'MINUTES')
+                    {
+                        input(message: "Would you like to still proceed?")
+                    }
                 }
             }
         }
