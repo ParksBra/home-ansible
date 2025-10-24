@@ -1,29 +1,22 @@
-- name: enable cpuset cgroup
-  lineinfile:
-    path: /boot/firmware/cmdline.txt
-    regexp: '(.*)($)'
-    line: '\1 cgroup_enable=cpuset\2'
-    state: present
-    # backup: true
-  # notify: reboot
+- name: enable {{ item }} cgroup
+  block:
+  - name: enable {{ item }} cgroup
+    shell: "sed -i '/cgroup_enable={{ item }}/!s/$/ cgroup_enable={{ item }}/w {{ temp_directory }}/sed_changes.txt' /boot/firmware/cmdline.txt"
+    become: true
+    notify: reboot
 
-- name: enable memory cgroup
-  lineinfile:
-    path: /boot/firmware/cmdline.txt
-    regexp: '(.*)($)'
-    line: '\1 cgroup_enable=memory\2'
-    state: present
-    # backup: true
-  # notify: reboot
+  - name: check if change_log is 0 bytes
+    stat:
+      path: "{{ temp_directory }}/sed_changes.txt"
+    register: change_log
 
-- name: enable hugetlb cgroup
-  lineinfile:
-    path: /boot/firmware/cmdline.txt
-    regexp: '(.*)($)'
-    line: '\1 cgroup_enable=hugetlb\2'
-    state: present
-    # backup: true
-  # notify: reboot
+  - name: notify reboot if cpuset cgroup was enabled
+    when: change_log.stat.size > 0
+    notify: reboot
+  with_items:
+    - cpuset
+    - memory
+    - hugetlb
 
 # - name: run handlers if any cgroup settings were changed
 #   meta: flush_handlers
