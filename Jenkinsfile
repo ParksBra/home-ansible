@@ -76,7 +76,7 @@ pipeline {
                 
                     script {
                         try {
-                            sh "${WORKSPACE}/.venv/bin/python -m ansible-lint ${WORKSPACE}/playbooks/*.yml"
+                            sh "${WORKSPACE}/.venv/bin/ansible-lint ${WORKSPACE}/playbooks/*.yml"
                         } catch (err) {
                         echo "Ansible linting validation failed: ${err}"
                         timeout(time: 2, unit: 'MINUTES')
