@@ -78,6 +78,14 @@ pipeline {
                 }
             }
         }
+        stage('validate-configuration') {
+            steps {
+                echo 'Validating Ansible playbook syntax...'
+                script {
+                    sh '.venv/bin/ansible-lint playbooks/*.yml'
+                }
+            }
+        }
         stage('make-controller') {
             steps {
                 withCredentials([sshUserPrivateKey(credentialsId: params.CONTROLLER_SSH_KEY, usernameVariable: 'ssh_user', keyFileVariable: 'ssh_key_path'), usernamePassword(credentialsId: params.INFISICAL_IDENTITY, usernameVariable: 'infisical_identity_client_id', passwordVariable: 'infisical_identity_secret')]) {
