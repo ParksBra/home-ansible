@@ -62,9 +62,9 @@ pipeline {
             steps {
                 echo 'Preparing environment...'
                 script {
-                    sh 'python3 -m venv .venv'
-                    sh '.venv/bin/pip install --upgrade pip && .venv/bin/pip install -r requirements.txt'
-                    sh '.venv/bin/ansible-galaxy install -r roles/requirements.yml'
+                    sh "python3 -m venv ${WORKSPACE}/.venv"
+                    sh "${WORKSPACE}/.venv/bin/pip install --upgrade pip && ${WORKSPACE}/.venv/bin/pip install -r requirements.txt"
+                    sh "${WORKSPACE}/.venv/bin/ansible-galaxy install -r ${WORKSPACE}/roles/requirements.yml"
                 }
             }
         }
@@ -74,7 +74,7 @@ pipeline {
                 
                     script {
                         try {
-                            sh '.venv/bin/ansible-lint playbooks/*.yml'
+                            sh "${WORKSPACE}/.venv/bin/ansible-lint ${WORKSPACE}/playbooks/*.yml"
                         } catch (err) {
                         echo "Ansible linting validation failed: ${err}"
                         timeout(time: 2, unit: 'MINUTES')
@@ -91,7 +91,7 @@ pipeline {
                     echo 'Running make_server Ansible playbook on controller...'
                     setup_env_vars(ssh_user, ssh_key_path, infisical_identity_client_id, infisical_identity_secret)
                     script {
-                        sh ".venv/bin/ansible-playbook 'playbooks/make_controller.yml' -l 'k8s_controller' ${ansible_opts}"
+                        sh "${WORKSPACE}/.venv/bin/ansible-playbook '${WORKSPACE}/playbooks/make_controller.yml' -l 'k8s_controller' ${ansible_opts}"
                     }
                 }
             }
@@ -102,7 +102,7 @@ pipeline {
                     echo 'Running make_server Ansible playbook on workers...'
                     setup_env_vars(ssh_user, ssh_key_path, infisical_identity_client_id, infisical_identity_secret)
                     script {
-                        sh ".venv/bin/ansible-playbook 'playbooks/make_worker.yml' -l 'k8s_worker' ${ansible_opts}"
+                        sh "${WORKSPACE}/.venv/bin/ansible-playbook '${WORKSPACE}/playbooks/make_worker.yml' -l 'k8s_worker' ${ansible_opts}"
                     }
                 }
             }
