@@ -1,0 +1,26 @@
+- name: enable cpuset cgroup
+  lineinfile:
+    path: /boot/firmware/cmdline.txt
+    regexp: ' cgroup_enable=cpuset'
+    line: ' cgroup_enable=cpuset'
+    state: present
+  notify: reboot
+
+- name: enable memory cgroup
+  lineinfile:
+    path: /boot/firmware/cmdline.txt
+    regexp: ' cgroup_enable=memory'
+    line: ' cgroup_enable=memory'
+    state: present
+  notify: reboot
+
+- name: enable hugetlb cgroup
+  lineinfile:
+    path: /boot/firmware/cmdline.txt
+    regexp: ' cgroup_enable=hugetlb'
+    line: ' cgroup_enable=hugetlb'
+    state: present
+  notify: reboot
+
+- name: run handlers if any cgroup settings were changed
+  meta: flush_handlers

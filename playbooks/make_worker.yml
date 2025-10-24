@@ -1,8 +1,9 @@
 ---
 - hosts: k8s_worker
   roles:
-    - common
-    - k8s_base
-    - k8s_worker
+    - {role: common, tags: ['common']}
+    - {role: k8s/rpi5_prepare, tags: ['k8s_rpi5_prepare']}
+    - {role: k8s/base, tags: ['k8s_base']}
+    - {role: k8s/worker, tags: ['k8s_worker']}
   become: true
   become_user: root

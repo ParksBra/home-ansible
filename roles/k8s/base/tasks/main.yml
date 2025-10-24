@@ -1,6 +1,3 @@
-- name: configure rpi for kubernetes
-  include_tasks: configure_rpi5_host.yml
-
 - name: install kubernetes apt repository
   include_tasks: install_k8s_repo.yml
 

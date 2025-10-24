@@ -1,9 +1,10 @@
 ---
 - hosts: k8s_controller
   roles:
-    - common
-    - k8s_base
-    - k8s_controller
-    - calico_cni
+    - {role: common, tags: ['common']}
+    - {role: k8s/rpi5_prepare, tags: ['k8s_rpi5_prepare']}
+    - {role: k8s/base, tags: ['k8s_base']}
+    - {role: k8s/controller, tags: ['k8s_controller']}
+    - {role: calico_cni, tags: ['calico_cni']}
   become: true
   become_user: root
