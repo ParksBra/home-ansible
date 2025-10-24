@@ -39,7 +39,7 @@ pipeline {
         )
         string(
             name: 'INFISCAL_URL',
-            defaultValue: 'http://localhost'
+            defaultValue: 'http://localhost:80'
         )
         string(
             name: 'INFISCAL_PROJECT_ID',

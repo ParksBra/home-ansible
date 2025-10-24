@@ -18,3 +18,5 @@ k8s_init_opts: ""
 infiscal_url: "{{ lookup('env', 'INFISCAL_URL') }}"
 infiscal_project_id: "{{ lookup('env', 'INFISCAL_PROJECT_ID') }}"
 infiscal_environment_slug: "{{ lookup('env', 'INFISCAL_ENVIRONMENT_SLUG') }}"
+
+temp_directory: "/tmp/ansible_home"

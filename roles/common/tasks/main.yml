@@ -17,3 +17,9 @@
 
 # - name: configure mounting points
 #   include_tasks: mount_disks.yml
+
+- name: create temporary directory
+  file:
+    path: "{{ temp_directory }}"
+    state: directory
+    mode: '0700'

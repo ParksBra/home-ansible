@@ -1,0 +1,5 @@
+- name: Install helm via apt
+  apt:
+    name: helm
+    state: present
+  become: true
