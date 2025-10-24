@@ -76,6 +76,7 @@ pipeline {
                 
                     script {
                         try {
+                            sh "source ${WORKSPACE}/.venv/bin/activate" // ansible-lint needs venv activated
                             sh "${WORKSPACE}/.venv/bin/ansible-lint ${WORKSPACE}/playbooks/*.yml"
                         } catch (err) {
                         echo "Ansible linting validation failed: ${err}"
