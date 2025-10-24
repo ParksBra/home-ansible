@@ -4,7 +4,7 @@
     regexp: '(.*)($)'
     line: '\1 cgroup_enable=cpuset\2'
     state: present
-    backup: true
+    # backup: true
   # notify: reboot
 
 - name: enable memory cgroup
@@ -13,7 +13,7 @@
     regexp: '(.*)($)'
     line: '\1 cgroup_enable=memory\2'
     state: present
-    backup: true
+    # backup: true
   # notify: reboot
 
 - name: enable hugetlb cgroup
@@ -22,7 +22,7 @@
     regexp: '(.*)($)'
     line: '\1 cgroup_enable=hugetlb\2'
     state: present
-    backup: true
+    # backup: true
   # notify: reboot
 
 # - name: run handlers if any cgroup settings were changed
