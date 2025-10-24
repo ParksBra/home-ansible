@@ -2,7 +2,6 @@ def setup_env_vars(ssh_user, ssh_key_path, infisical_identity_client_id, infisic
     env.SSH_USER = ssh_user
     env.SSH_KEY_PATH = ssh_key_path
 
-    env.GIT_BRANCH = params.BRANCH
     env.DEBUG = params.DEBUG
 
     env.INFISCAL_URL = params.INFISCAL_URL
@@ -23,15 +22,6 @@ def setup_env_vars(ssh_user, ssh_key_path, infisical_identity_client_id, infisic
 pipeline {
     agent any
     parameters {
-        gitParameter(
-            type: 'BRANCH',
-            name: 'BRANCH',
-            description: 'Choose a branch to checkout',
-            branchFilter: 'origin/(.*)',
-            defaultValue: 'main',
-            selectedValue: 'DEFAULT',
-            sortMode: 'DESCENDING_SMART'
-        )
         booleanParam(
             name: 'DEBUG',
             defaultValue: false,
@@ -86,7 +76,7 @@ pipeline {
                 }
             }
         }
-        stage('make-controller') {
+        stage('make-k8s-controller') {
             steps {
                 withCredentials([sshUserPrivateKey(credentialsId: params.CONTROLLER_SSH_KEY, usernameVariable: 'ssh_user', keyFileVariable: 'ssh_key_path'), usernamePassword(credentialsId: params.INFISICAL_IDENTITY, usernameVariable: 'infisical_identity_client_id', passwordVariable: 'infisical_identity_secret')]) {
                     echo 'Running make_server Ansible playbook on controller...'
@@ -97,7 +87,7 @@ pipeline {
                 }
             }
         }
-        stage('make-workers') {
+        stage('make-k8s-workers') {
             steps {
                 withCredentials([sshUserPrivateKey(credentialsId: params.WORKER_SSH_KEY, usernameVariable: 'ssh_user', keyFileVariable: 'ssh_key_path'), usernamePassword(credentialsId: params.INFISICAL_IDENTITY, usernameVariable: 'infisical_identity_client_id', passwordVariable: 'infisical_identity_secret')]) {
                     echo 'Running make_server Ansible playbook on workers...'
