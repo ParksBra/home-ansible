@@ -10,4 +10,5 @@
 
 - name: notify reboot if cpuset cgroup was enabled
   when: change_log.stat.size > 0
+  shell: "echo 'cgroup {{ item }} enabled, reboot required'"
   notify: reboot
