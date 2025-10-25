@@ -5,5 +5,5 @@
     - memory
     - hugetlb
 
-# - name: run handlers if any cgroup settings were changed
-#   meta: flush_handlers
+- name: run handlers if any cgroup settings were changed
+  meta: flush_handlers
