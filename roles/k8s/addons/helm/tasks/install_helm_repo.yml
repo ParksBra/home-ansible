@@ -30,6 +30,6 @@
   apt_repository:
     repo: '[signed-by=/etc/apt/keyrings/helm-apt-keyring.gpg] https://packages.buildkite.com/helm-linux/helm-debian/any/ /"'
     state: present
-    filename: 'kubernetes'
+    filename: 'helm'
     update_cache: true
   become: true
