@@ -2,7 +2,7 @@
   - name: Reset k8s
     include_role:
       name: k8s/reset
-  - name: set reset success
+  - name: Set reset success
     set_fact:
       reset_success: true
   rescue:
@@ -15,13 +15,14 @@
     kubeadm init --service-cidr {{ k8s_service_cidr }} \
                   --kubernetes-version v{{ k8s_version }} \
                   --pod-network-cidr {{ k8s_pod_network_cidr }} \
-                  --token {{ lookup('infisical.vault.read_secrets', secret_name='k8s-discovery-token', path='/', project_id=infiscal_project_id, env_slug=infiscal_environment_slug, url=infiscal_url).value }} \
+                  --token {{ k8s_discovery_token }} \
                   --apiserver-advertise-address {{ k8s_apiserver_ip }} \
                   --apiserver-bind-port {{ k8s_apiserver_port }} \
                   --cri-socket=unix://{{ k8s_container_runtime_socket }} \
                   {{ k8s_kubeadm_opts }} \
                   {{ k8s_init_opts }}
   register: init_k8s_cluster
+  changed_when: "'Your Kubernetes control-plane has initialized successfully' in init_k8s_cluster.stdout"
   environment:
     no_proxy: "$no_proxy,.svc,.svc.cluster.local"
   no_log: "{{ not debug }}"

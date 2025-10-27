@@ -12,12 +12,13 @@
 - name: Join to Kubernetes cluster
   when: reset_success
   shell: |
-    kubeadm join --token {{ lookup('infisical.vault.read_secrets', secret_name='k8s-discovery-token', path='/', project_id=infiscal_project_id, env_slug=infiscal_environment_slug, url=infiscal_url).value }} \
+    kubeadm join --token {{ k8s_discovery_token }} \
                 --discovery-token-unsafe-skip-ca-verification \
                 --cri-socket=unix://{{ k8s_container_runtime_socket }} \
                 {{ k8s_kubeadm_opts }} \
                 {{ k8s_apiserver_ip }}:{{ k8s_apiserver_port }}
-  register: join_cluster
+  register: join_k8s_cluster
+  changed_when: "'This node has joined the cluster' in join_k8s_cluster.stdout"
   environment:
     no_proxy: "$no_proxy,.svc,.svc.cluster.local"
   no_log: "{{ not debug }}"
