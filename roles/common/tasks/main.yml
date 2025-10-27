@@ -1,6 +1,6 @@
 - name: Update apt
   ansible.builtin.apt:
-    update_cache: yes
+    update_cache: true
     upgrade: 'safe'
     state: latest
 

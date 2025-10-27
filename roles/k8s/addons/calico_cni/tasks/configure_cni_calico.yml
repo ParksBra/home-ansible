@@ -1,12 +1,29 @@
-- name: Create CNI directory
-  ansible.builtin.file:
-    path: "{{ k8s_cni_directory }}"
-    state: directory
+# - name: Create CNI directory
+#   ansible.builtin.file:
+#     path: "{{ k8s_cni_directory }}"
+#     state: directory
 
-- name: Configure Calico CNI
-  ansible.builtin.template:
-    src: "calico.yml.j2"
-    dest: "{{ k8s_cni_directory }}/calico.yml"
+# - name: Configure Calico CNI
+#   ansible.builtin.template:
+#     src: "calico.yml.j2"
+#     dest: "{{ k8s_cni_directory }}/calico.yml"
 
-- name: Apply Calico CNI configuration
-  ansible.builtin.command: "kubectl --kubeconfig={{ k8s_kubectl_config_path }} apply -f {{ k8s_cni_directory }}/calico.yml"
+# - name: Apply Calico CNI configuration
+#   ansible.builtin.command: "kubectl --kubeconfig={{ k8s_kubectl_config_path }} apply -f {{ k8s_cni_directory }}/calico.yml"
+
+- name: Create tigera namespace
+  ansible.builtin.shell: "kubectl --kubeconfig={{ k8s_kubectl_config_path }} create namespace {{ k8s_cni_calico_namespace }}"
+  register: create_tigera_namespace
+  failed_when: "create_tigera_namespace.rc != 0 and 'AlreadyExists' not in create_tigera_namespace.stderr"
+  changed_when: "'Created' in create_tigera_namespace.stdout"
+
+- name: Install calico through Helm
+  ansible.builtin.shell: |
+    helm install calico tigera/tigera-operator \
+      --namespace {{ k8s_cni_calico_namespace }} \
+      --kubeconfig {{ k8s_kubectl_config_path }} \
+      --version {{ k8s_cni_calico_version }} \
+      --set installation.calicoNetwork.ipPools[0].cidr={{ k8s_pod_network_cidr }}
+  register: install_calico_helm
+  failed_when: "install_calico_helm.rc != 0 and 'cannot re-use a name that is still in use' not in install_calico_helm.stderr"
+  changed_when: "'installed' in install_calico_helm.stdout"
