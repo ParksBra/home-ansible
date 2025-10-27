@@ -27,7 +27,7 @@
     helm install calico projectcalico/tigera-operator \
       --namespace {{ k8s_cni_calico_namespace }} \
       --kubeconfig {{ k8s_kubectl_config_path }} \
-      --version {{ k8s_cni_calico_version }} \
+      --version v{{ k8s_cni_calico_version }} \
       --set installation.calicoNetwork.ipPools[0].cidr={{ k8s_pod_network_cidr }}
   register: install_calico_helm
   failed_when: "install_calico_helm.rc != 0 and 'cannot re-use a name that is still in use' not in install_calico_helm.stderr"
