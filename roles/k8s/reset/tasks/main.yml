@@ -1,5 +1,5 @@
-- name: reset k8s
+- name: Reset k8s
   include_tasks: k8s_reset.yml
 
-- name: run k8s cleanup
+- name: Run k8s cleanup
   include_tasks: k8s_cleanup.yml

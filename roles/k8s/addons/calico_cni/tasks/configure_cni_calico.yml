@@ -1,12 +1,12 @@
-- name: create CNI directory
+- name: Create CNI directory
   file:
     path: "{{ k8s_cni_directory }}"
     state: directory
 
-- name: "configure Calico CNI"
+- name: Configure Calico CNI
   template:
     src: "calico.yml.j2"
     dest: "{{ k8s_cni_directory }}/calico.yml"
 
-- name: apply Calico CNI configuration
+- name: Apply Calico CNI configuration
   command: "kubectl --kubeconfig={{ k8s_kubectl_config_path }} apply -f {{ k8s_cni_directory }}/calico.yml"

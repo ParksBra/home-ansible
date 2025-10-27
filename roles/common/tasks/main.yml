@@ -1,24 +1,24 @@
-- name: update apt
+- name: Update apt
   apt:
     update_cache: yes
     upgrade: 'safe'
     state: latest
 
-- name: set hostname
+- name: Set hostname
   hostname:
     name: "{{ inventory_hostname }}"
   when: inventory_hostname is defined
 
-# - name: create users and groups
+# - name: Create users and groups
 #   include_tasks: configure_user_group.yml
 
-- name: configure patching
+- name: Configure patching
   include_tasks: configure_patching.yml
 
-# - name: configure mounting points
+# - name: Configure mounting points
 #   include_tasks: mount_disks.yml
 
-- name: create temporary directory
+- name: Create temporary directory
   file:
     path: "{{ temp_directory }}"
     state: directory

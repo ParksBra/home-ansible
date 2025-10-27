@@ -1,8 +1,8 @@
-- name: configure cgroups
+- name: Configure cgroups
   include_tasks: configure_rpi5_cgroups.yml
 
-- name: configure networking
+- name: Configure networking
   include_tasks: configure_rpi5_networking.yml
 
-- name: configure swap
+- name: Configure swap
   include_tasks: configure_rpi5_swap.yml

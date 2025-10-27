@@ -1,13 +1,13 @@
-- name: enable {{ item }} cgroup
+- name: Enable {{ item }} cgroup
   shell: "sed -i '/cgroup_enable={{ item }}/!s/$/ cgroup_enable={{ item }}/w {{ temp_directory }}/sed_changes.txt' /boot/firmware/cmdline.txt"
   become: true
 
-- name: check if change_log is 0 bytes
+- name: Check if change_log is 0 bytes
   stat:
     path: "{{ temp_directory }}/sed_changes.txt"
   register: change_log
 
-- name: notify reboot if cpuset cgroup was enabled
+- name: Notify reboot if cpuset cgroup was enabled
   when: change_log.stat.size > 0
   shell: "echo 'cgroup {{ item }} enabled, reboot required'"
   notify: reboot

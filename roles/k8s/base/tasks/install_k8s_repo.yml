@@ -1,32 +1,32 @@
-- name: install apt-transport-https
+- name: Install apt-transport-https
   apt:
     name: apt-transport-https
     state: present
   become: true
 
-- name: install ca-certificates
+- name: Install ca-certificates
   apt:
     name: ca-certificates
     state: present
   become: true
 
-- name: install curl
+- name: Install curl
   apt:
     name: curl
     state: present
   become: true
 
-- name: install gpg
+- name: Install gpg
   apt:
     name: gpg
     state: present
   become: true
 
-- name: get k8s release signing key
+- name: Get k8s release signing key
   shell: 'curl -fsSL https://pkgs.k8s.io/core:/stable:/v{{ k8s_base_version }}/deb/Release.key | sudo gpg --yes --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg'
   become: true
 
-- name: add in apt source for k8s
+- name: Add in apt source for k8s
   apt_repository:
     repo: 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v{{ k8s_base_version }}/deb/ /'
     state: present

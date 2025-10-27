@@ -1,8 +1,8 @@
-- name: install kubernetes apt repository
+- name: Install kubernetes apt repository
   include_tasks: install_k8s_repo.yml
 
-- name: install container dependencies
+- name: Install container dependencies
   include_tasks: install_k8s_dependencies.yml
 
-- name: install kubernetes packages
+- name: Install kubernetes packages
   include_tasks: install_k8s.yml

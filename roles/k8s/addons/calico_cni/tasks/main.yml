@@ -1,2 +1,2 @@
-- name: configure CNI
+- name: Configure CNI
   include_tasks: configure_cni_calico.yml

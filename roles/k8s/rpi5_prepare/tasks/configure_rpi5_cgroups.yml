@@ -1,9 +1,9 @@
-- name: enable required cgroups
+- name: Enable required cgroups
   include_tasks: enable_cgroup.yml
   loop:
     - cpuset
     - memory
     - hugetlb
 
-- name: run handlers if any cgroup settings were changed
+- name: Run handlers if any cgroup settings were changed
   meta: flush_handlers

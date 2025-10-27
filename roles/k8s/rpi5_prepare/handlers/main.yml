@@ -1,4 +1,4 @@
-- name: reboot host
+- name: Reboot host
   reboot:
     pre_reboot_delay: 0
     post_reboot_delay: 5

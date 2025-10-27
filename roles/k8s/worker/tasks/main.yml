@@ -1,2 +1,2 @@
-- name: join k8s cluster
+- name: Join k8s cluster
   include_tasks: k8s_join.yml
