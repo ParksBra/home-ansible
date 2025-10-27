@@ -1,0 +1,5 @@
+- name: Install Helm
+  include_tasks: install_helm.yml
+
+- name: Configure Helm RBAC
+  include_tasks: configure_helm_rbac.yml
