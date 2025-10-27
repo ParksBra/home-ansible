@@ -28,7 +28,7 @@
 
 - name: add in apt source for helm
   apt_repository:
-    repo: '[signed-by=/etc/apt/keyrings/helm-apt-keyring.gpg] https://packages.buildkite.com/helm-linux/helm-debian/any/ any main"'
+    repo: '[signed-by=/etc/apt/keyrings/helm-apt-keyring.gpg] https://packages.buildkite.com/helm-linux/helm-debian/any/ /"'
     state: present
     filename: 'kubernetes'
     update_cache: true
