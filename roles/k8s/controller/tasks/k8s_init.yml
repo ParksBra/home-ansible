@@ -6,7 +6,8 @@
     set_fact:
       reset_success: true
   rescue:
-    - set_fact:
+    - name: Set reset failure
+      set_fact:
         reset_success: false
 
 - name: Create/Init k8s cluster
