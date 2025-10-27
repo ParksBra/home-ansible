@@ -1,18 +1,18 @@
 - block:
   - name: Reset k8s
-    include_role:
+    ansible.builtin.include_role:
       name: k8s/reset
   - name: Set reset success
-    set_fact:
+    ansible.builtin.set_fact:
       reset_success: true
   rescue:
     - name: Set reset failure
-      set_fact:
+      ansible.builtin.set_fact:
         reset_success: false
 
 - name: Join to Kubernetes cluster
   when: reset_success
-  shell: |
+  ansible.builtin.shell: |
     kubeadm join --token {{ k8s_discovery_token }} \
                 --discovery-token-unsafe-skip-ca-verification \
                 --cri-socket=unix://{{ k8s_container_runtime_socket }} \

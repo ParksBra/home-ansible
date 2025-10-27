@@ -1,17 +1,17 @@
 - name: Install common swap package
-  apt:
+  ansible.builtin.apt:
     name: dphys-swapfile
     state: present
   become: true
 
 - name: Ensure rpi-swap is removed
-  apt:
+  ansible.builtin.apt:
     name: rpi-swap
     state: absent
   become: true
 
 - name: Disable swap service
-  service:
+  ansible.builtin.service:
     name: dphys-swapfile
     enabled: false
     masked: true
@@ -19,11 +19,11 @@
   become: true
 
 - name: Mask swap in systemd
-  systemd:
+  ansible.builtin.systemd:
     name: dev-zram0.swap
     masked: true
   become: true
 
 - name: Disable swap
-  shell: swapoff --all
+  ansible.builtin.shell: swapoff --all
   become: true

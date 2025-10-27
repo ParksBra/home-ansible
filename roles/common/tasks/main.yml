@@ -1,11 +1,11 @@
 - name: Update apt
-  apt:
+  ansible.builtin.apt:
     update_cache: yes
     upgrade: 'safe'
     state: latest
 
 - name: Set hostname
-  hostname:
+  ansible.builtin.hostname:
     name: "{{ inventory_hostname }}"
   when: inventory_hostname is defined
 
@@ -13,13 +13,13 @@
 #   include_tasks: configure_user_group.yml
 
 - name: Configure patching
-  include_tasks: configure_patching.yml
+  ansible.builtin.include_tasks: configure_patching.yml
 
 # - name: Configure mounting points
 #   include_tasks: mount_disks.yml
 
 - name: Create temporary directory
-  file:
+  ansible.builtin.file:
     path: "{{ temp_directory }}"
     state: directory
     mode: '0700'

@@ -1,9 +1,9 @@
 - name: Enable required cgroups
-  include_tasks: enable_cgroup.yml
+  ansible.builtin.include_tasks: enable_cgroup.yml
   loop:
     - cpuset
     - memory
     - hugetlb
 
 - name: Run handlers if any cgroup settings were changed
-  meta: flush_handlers
+  ansible.builtin.meta: flush_handlers

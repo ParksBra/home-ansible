@@ -1,11 +1,11 @@
 - name: Remove .kube directory
-  file:
+  ansible.builtin.file:
     path: "~/.kube/"
     state: absent
   become: true
-  become_user: "{{ ansible_ssh_user }}"
 
 - name: Remove CNI network interfaces
-  file:
+  ansible.builtin.file:
     path: /etc/cni/net.d
     state: absent
+  become: true

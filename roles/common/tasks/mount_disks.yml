@@ -1,12 +1,12 @@
 - name: Make sure mount points exist
-  file:
+  ansible.builtin.file:
     dest: "{{ home_path }}"
     state: directory
     recurse: true
 
 - name: Mount nvme for docker home
   when: ansible_devices['nvme0n1'] is defined
-  mount:
+  ansible.posix.mount:
     src: "/dev/nvme0n1"
     boot: true
     backup: true
@@ -16,14 +16,14 @@
     state: mounted
 
 - name: Make sure mount points exist
-  file:
+  ansible.builtin.file:
     dest: "{{ homeassistant_backup_disk_path }}"
     state: directory
     recurse: true
 
 - name: Mount backup disk
   when: ansible_devices['sda'] is defined
-  mount:
+  ansible.posix.mount:
     src: "/dev/sda1"
     boot: true
     backup: true

@@ -1,5 +1,5 @@
 - name: Install containerd
-  apt:
+  ansible.builtin.apt:
     name: containerd
     state: present
   become: true

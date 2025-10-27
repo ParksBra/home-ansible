@@ -1,5 +1,5 @@
 - name: Reboot host
-  reboot:
+  ansible.builtin.reboot:
     pre_reboot_delay: 0
     post_reboot_delay: 5
     reboot_timeout: 300

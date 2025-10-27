@@ -1,33 +1,33 @@
 - name: Install apt-transport-https
-  apt:
+  ansible.builtin.apt:
     name: apt-transport-https
     state: present
   become: true
 
 - name: Install ca-certificates
-  apt:
+  ansible.builtin.apt:
     name: ca-certificates
     state: present
   become: true
 
 - name: Install curl
-  apt:
+  ansible.builtin.apt:
     name: curl
     state: present
   become: true
 
 - name: Install gpg
-  apt:
+  ansible.builtin.apt:
     name: gpg
     state: present
   become: true
 
 - name: Get helm release signing key
-  shell: 'curl -fsSL https://packages.buildkite.com/helm-linux/helm-debian/gpgkey | sudo gpg --yes --dearmor -o /etc/apt/keyrings/helm-apt-keyring.gpg'
+  ansible.builtin.shell: 'curl -fsSL https://packages.buildkite.com/helm-linux/helm-debian/gpgkey | sudo gpg --yes --dearmor -o /etc/apt/keyrings/helm-apt-keyring.gpg'
   become: true
 
 - name: Add in apt source for helm
-  apt_repository:
+  ansible.builtin.apt_repository:
     repo: 'deb [signed-by=/etc/apt/keyrings/helm-apt-keyring.gpg] https://packages.buildkite.com/helm-linux/helm-debian/any/ any main'
     state: present
     filename: 'helm'
