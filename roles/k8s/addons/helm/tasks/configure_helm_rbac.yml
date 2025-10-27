@@ -8,3 +8,5 @@
 
 - name: Run helm repo update
   shell: "helm --kubeconfig {{ k8s_kubectl_config_path }} repo update"
+  register: helm_repo_update
+  failed_when: helm_repo_update.rc != 0 and 'no repositories found' not in helm_repo_update.stderr
