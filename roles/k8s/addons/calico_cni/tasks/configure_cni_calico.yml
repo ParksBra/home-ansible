@@ -1,16 +1,3 @@
-# - name: Create CNI directory
-#   ansible.builtin.file:
-#     path: "{{ k8s_cni_directory }}"
-#     state: directory
-
-# - name: Configure Calico CNI
-#   ansible.builtin.template:
-#     src: "calico.yml.j2"
-#     dest: "{{ k8s_cni_directory }}/calico.yml"
-
-# - name: Apply Calico CNI configuration
-#   ansible.builtin.command: "kubectl --kubeconfig={{ k8s_kubectl_config_path }} apply -f {{ k8s_cni_directory }}/calico.yml"
-
 - name: Add Calico Helm repo
   ansible.builtin.shell: "helm repo add projectcalico https://docs.tigera.io/calico/charts"
   register: add_calico_helm_repo
@@ -32,3 +19,16 @@
   register: install_calico_helm
   failed_when: "install_calico_helm.rc != 0 and 'cannot re-use a name that is still in use' not in install_calico_helm.stderr"
   changed_when: "'installed' in install_calico_helm.stdout"
+
+- name: Create CNI directory
+  ansible.builtin.file:
+    path: "{{ k8s_cni_directory }}"
+    state: directory
+
+- name: Configure Calico CNI
+  ansible.builtin.template:
+    src: "calico.yml.j2"
+    dest: "{{ k8s_cni_directory }}/calico.yml"
+
+- name: Apply Calico CNI configuration
+  ansible.builtin.command: "kubectl --kubeconfig={{ k8s_kubectl_config_path }} apply -f {{ k8s_cni_directory }}/calico.yml"
