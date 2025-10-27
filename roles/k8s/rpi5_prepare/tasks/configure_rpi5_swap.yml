@@ -27,3 +27,11 @@
 - name: Disable swap
   ansible.builtin.shell: swapoff --all
   become: true
+
+- name: Disable swappiness
+  ansible.posix.sysctl:
+    name: vm.swappiness
+    value: '0'
+    state: present
+    reload: true
+  become: true

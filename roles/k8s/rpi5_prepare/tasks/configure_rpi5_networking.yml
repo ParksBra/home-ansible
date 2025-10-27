@@ -5,3 +5,11 @@
     state: present
     reload: true
   become: true
+
+- name: Enable bridged traffic to iptables
+  ansible.posix.sysctl:
+    name: net.bridge.bridge-nf-call-iptables
+    value: '1'
+    state: present
+    reload: true
+  become: true
