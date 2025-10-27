@@ -1,3 +1,6 @@
+- name: Install Helm Repository
+  include_tasks: install_helm_repo.yml
+
 - name: Install Helm
   include_tasks: install_helm.yml
 
