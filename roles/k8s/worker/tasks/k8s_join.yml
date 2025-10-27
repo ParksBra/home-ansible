@@ -1,7 +1,7 @@
 - block:
   - name: Reset k8s
     include_role:
-      name: k8s_reset
+      name: k8s/reset
   - name: set reset success
     set_fact:
       reset_success: true
