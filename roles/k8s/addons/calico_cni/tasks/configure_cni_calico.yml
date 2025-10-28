@@ -11,11 +11,11 @@
 - name: Update calico ip pool
   ansible.builtin.replace:
     path: "{{ k8s_cni_directory }}/calico.yml"
-    regexp: "{{ item.key }}"
-    replace: "{{ item.value }}"
+    regexp: "{{ item.regexp }}"
+    replace: "{{ item.replace }}"
   with_items:
-    - "(# )?- name: CALICO_IPV4POOL_CIDR": "- name: CALICO_IPV4POOL_CIDR"
-    - "(# )?  value: \"[0-9\\./]*\"": "  value: \"{{ k8s_pod_network_cidr }}\""
+    - {regexp: "(# )?- name: CALICO_IPV4POOL_CIDR", replace: "- name: CALICO_IPV4POOL_CIDR"}
+    - {regexp: "(# )?  value: \"[0-9\\./]*\"", replace: "  value: \"{{ k8s_pod_network_cidr }}\""}
 
 - name: Apply Calico CNI configuration
   ansible.builtin.command: "kubectl --kubeconfig={{ k8s_kubectl_config_path }} apply -f {{ k8s_cni_directory }}/calico.yml"
