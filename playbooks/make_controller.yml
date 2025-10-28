@@ -5,7 +5,7 @@
     - {role: k8s/rpi5_prepare, tags: ['k8s_rpi5_prepare']}
     - {role: k8s/base, tags: ['k8s_base']}
     - {role: k8s/controller, tags: ['k8s_controller']}
-    - {role: k8s/addons/helm, tags: ['helm']}
+    # - {role: k8s/addons/helm, tags: ['helm']}
     - {role: k8s/addons/calico_cni, tags: ['calico_cni']}
   become: true
   become_user: root
