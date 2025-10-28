@@ -1,41 +1,23 @@
-- name: Install kubelet
+- name: Install k8s components
   ansible.builtin.apt:
-    name: "kubelet={{ k8s_version }}*"
+    name: "{{ item }}={{ k8s_version }}*"
     state: present
     force: true
   become: true
+  loop:
+    - kubelet
+    - kubeadm
+    - kubectl
 
-- name: Hold kubelet at current version
+- name: Hold k8s components at current version
   ansible.builtin.dpkg_selections:
-    name: kubelet
+    name: "{{ item }}"
     selection: hold
   become: true
-
-- name: Install kubeadm
-  ansible.builtin.apt:
-    name: "kubeadm={{ k8s_version }}*"
-    state: present
-    force: true
-  become: true
-
-- name: Hold kubeadm at current version
-  ansible.builtin.dpkg_selections:
-    name: kubeadm
-    selection: hold
-  become: true
-
-- name: Install kubectl
-  ansible.builtin.apt:
-    name: "kubectl={{ k8s_version }}*"
-    state: present
-    force: true
-  become: true
-
-- name: Hold kubectl at current version
-  ansible.builtin.dpkg_selections:
-    name: kubectl
-    selection: hold
-  become: true
+  loop:
+    - kubelet
+    - kubeadm
+    - kubectl
 
 - name: Enable kubelet service
   ansible.builtin.systemd:

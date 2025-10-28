@@ -1,27 +1,3 @@
-- name: Install apt-transport-https
-  ansible.builtin.apt:
-    name: apt-transport-https
-    state: present
-  become: true
-
-- name: Install ca-certificates
-  ansible.builtin.apt:
-    name: ca-certificates
-    state: present
-  become: true
-
-- name: Install curl
-  ansible.builtin.apt:
-    name: curl
-    state: present
-  become: true
-
-- name: Install gpg
-  ansible.builtin.apt:
-    name: gpg
-    state: present
-  become: true
-
 - name: Get k8s release signing key
   ansible.builtin.shell: 'curl -fsSL https://pkgs.k8s.io/core:/stable:/v{{ k8s_base_version }}/deb/Release.key | sudo gpg --yes --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg'
   become: true

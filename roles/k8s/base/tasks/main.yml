@@ -1,8 +1,5 @@
 - name: Install kubernetes apt repository
   ansible.builtin.include_tasks: install_k8s_repo.yml
 
-- name: Install container dependencies
-  ansible.builtin.include_tasks: install_k8s_dependencies.yml
-
 - name: Install kubernetes packages
   ansible.builtin.include_tasks: install_k8s.yml
