@@ -1,2 +1,8 @@
 - name: Reset Kubernetes component
   ansible.builtin.shell: "kubeadm reset --force --cri-socket=unix://{{ k8s_container_runtime_socket }}"
+  register: reset_k8s
+  changed_when: "reset_k8s.rc == 0"
+  notify: k8s_cleanup
+
+- name: Flush handlers after k8s reset
+  ansible.builtin.meta: flush_handlers
