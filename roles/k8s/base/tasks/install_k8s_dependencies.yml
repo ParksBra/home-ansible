@@ -35,7 +35,7 @@
 
 - name: Add in apt source for docker
   ansible.builtin.apt_repository:
-    repo: 'deb [arch=arm64 signed-by=/etc/apt/keyrings/docker-apt-keyring.gpg] https://download.docker.com/linux/debian/dists/trixie stable'
+    repo: 'deb [arch=arm64 signed-by=/etc/apt/keyrings/docker-apt-keyring.gpg] https://download.docker.com/linux/debian trixie stable'
     state: present
     filename: 'docker'
     update_cache: true
