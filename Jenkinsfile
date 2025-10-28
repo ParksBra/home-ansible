@@ -27,6 +27,11 @@ pipeline {
             defaultValue: false,
             description: 'Enable debug logging and display of secrets'
         )
+        booleanParam(
+            name: 'SKIP_VALIDATION',
+            defaultValue: false,
+            description: 'Skip validation steps'
+        )
         credentials(
             name: 'CONTROLLER_SSH_KEY',
             credentialType: 'SSH Username with private key',
@@ -71,6 +76,9 @@ pipeline {
             }
         }
         stage('validate-configuration') {
+            when {
+                expression { return !params.SKIP_VALIDATION.toBoolean() }
+            }
             steps {
                 echo 'Validating Ansible playbook syntax...'
                 
