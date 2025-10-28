@@ -1,5 +1,42 @@
-- name: Install containerd
+# - name: Install containerd
+#   ansible.builtin.apt:
+#     name: containerd
+#     state: present
+#   become: true
+
+
+- name: Install apt-transport-https
   ansible.builtin.apt:
-    name: containerd
+    name: apt-transport-https
     state: present
+  become: true
+
+- name: Install ca-certificates
+  ansible.builtin.apt:
+    name: ca-certificates
+    state: present
+  become: true
+
+- name: Install curl
+  ansible.builtin.apt:
+    name: curl
+    state: present
+  become: true
+
+- name: Install gpg
+  ansible.builtin.apt:
+    name: gpg
+    state: present
+  become: true
+
+- name: Get docker release signing key
+  ansible.builtin.shell: 'curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --yes --dearmor -o /etc/apt/keyrings/docker-apt-keyring.gpg'
+  become: true
+
+- name: Add in apt source for docker
+  ansible.builtin.apt_repository:
+    repo: 'deb [arch=arm64 signed-by=/etc/apt/keyrings/docker-apt-keyring.gpg] https://download.docker.com/linux/debian/dists/trixie stable'
+    state: present
+    filename: 'docker'
+    update_cache: true
   become: true
