@@ -52,3 +52,12 @@
     - docker-buildx-plugin
     - docker-compose-plugin
   become: true
+
+- name: Enable containerd CRI
+  ansible.builtin.lineinfile:
+    path: /etc/containerd/config.toml
+    regexp: '^disabled_plugins = \["cri"\]$'
+    state: present
+    line: 'disabled_plugins = []'
+  notify: restart_containerd
+  become: true
