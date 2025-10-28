@@ -1,34 +1,21 @@
-# - name: Add Calico Helm repo
-#   ansible.builtin.shell: "helm repo add projectcalico https://docs.tigera.io/calico/charts"
-#   register: add_calico_helm_repo
-#   changed_when: "'has been added to your repositories' in add_calico_helm_repo.stdout"
-
-# - name: Create tigera namespace
-#   ansible.builtin.shell: "kubectl --kubeconfig={{ k8s_kubectl_config_path }} create namespace {{ k8s_cni_calico_namespace }}"
-#   register: create_tigera_namespace
-#   failed_when: "create_tigera_namespace.rc != 0 and 'AlreadyExists' not in create_tigera_namespace.stderr"
-#   changed_when: "'namespace/{{ k8s_cni_calico_namespace }} created' in create_tigera_namespace.stdout"
-
-# - name: Install calico through Helm
-#   ansible.builtin.shell: |
-#     helm install calico projectcalico/tigera-operator \
-#       --namespace {{ k8s_cni_calico_namespace }} \
-#       --kubeconfig {{ k8s_kubectl_config_path }} \
-#       --version v{{ k8s_cni_calico_version }} \
-#       --set installation.calicoNetwork.ipPools[0].cidr={{ k8s_pod_network_cidr }}
-#   register: install_calico_helm
-#   failed_when: "install_calico_helm.rc != 0 and 'cannot re-use a name that is still in use' not in install_calico_helm.stderr"
-#   changed_when: "'installed' in install_calico_helm.stdout"
-
 - name: Create CNI directory
   ansible.builtin.file:
     path: "{{ k8s_cni_directory }}"
     state: directory
 
-- name: Configure Calico CNI
-  ansible.builtin.template:
-    src: "calico.yml.j2"
+- name: Pull Calico k8s setup
+  ansible.builtin.get_url:
+    url: "https://raw.githubusercontent.com/projectcalico/calico/v{{ k8s_cni_calico_version }}/manifests/calico.yaml"
     dest: "{{ k8s_cni_directory }}/calico.yml"
+
+- name: Update calico ip pool
+  ansible.builtin.replace:
+    path: "{{ k8s_cni_directory }}/calico.yml"
+    regexp: "{{ item.key }}"
+    replace: "{{ item.value }}"
+  with_items:
+    - "(# )?- name: CALICO_IPV4POOL_CIDR": "- name: CALICO_IPV4POOL_CIDR"
+    - "(# )?  value: \"[0-9\\./]\"": "  value: \"{{ k8s_cni_calico_ipv4pool_cidr }}\""
 
 - name: Apply Calico CNI configuration
   ansible.builtin.command: "kubectl --kubeconfig={{ k8s_kubectl_config_path }} apply -f {{ k8s_cni_directory }}/calico.yml"
