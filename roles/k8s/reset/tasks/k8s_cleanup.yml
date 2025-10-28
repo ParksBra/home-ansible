@@ -6,6 +6,6 @@
 
 - name: Remove CNI network interfaces
   ansible.builtin.file:
-    path: /etc/cni/net.d
+    path: /etc/cni/net.d/
     state: absent
   become: true
