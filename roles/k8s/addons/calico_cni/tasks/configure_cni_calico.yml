@@ -15,7 +15,7 @@
     replace: "{{ item.value }}"
   with_items:
     - "(# )?- name: CALICO_IPV4POOL_CIDR": "- name: CALICO_IPV4POOL_CIDR"
-    - "(# )?  value: \"[0-9\\./]\"": "  value: \"{{ k8s_cni_calico_ipv4pool_cidr }}\""
+    - "(# )?  value: \"[0-9\\./]*\"": "  value: \"{{ k8s_pod_network_cidr }}\""
 
 - name: Apply Calico CNI configuration
   ansible.builtin.command: "kubectl --kubeconfig={{ k8s_kubectl_config_path }} apply -f {{ k8s_cni_directory }}/calico.yml"
