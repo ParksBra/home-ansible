@@ -1,3 +1,9 @@
+- name: Create temporary directory
+  ansible.builtin.file:
+    path: "{{ temp_directory }}"
+    state: directory
+    mode: '0755'
+
 - name: Copy RBAC configuration for helm
   ansible.builtin.template:
     src: helm_rbac_config.yml.j2
