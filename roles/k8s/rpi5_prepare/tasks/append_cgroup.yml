@@ -1,5 +1,5 @@
-- name: Enable {{ item }} cgroup
-  ansible.builtin.shell: "sed -i '/cgroup_enable={{ item }}/!s/$/ cgroup_enable={{ item }}/w {{ temp_directory }}/sed_changes.txt' /boot/firmware/cmdline.txt"
+- name: Append {{ item }} to cmdline.txt
+  ansible.builtin.shell: "sed -i '/{{ item }}/!s/$/ {{ item }}/w {{ temp_directory }}/sed_changes.txt' /boot/firmware/cmdline.txt"
   become: true
 
 - name: Check if change_log is 0 bytes
