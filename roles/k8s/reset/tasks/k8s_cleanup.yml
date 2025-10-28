@@ -9,7 +9,9 @@
     path: /etc/cni/net.d/*
     state: absent
   become: true
-  notify: restart_containerd
 
-- name: Flush handlers after k8s cleanup
-  ansible.builtin.meta: flush_handlers
+- name: Restart containerd
+  ansible.builtin.systemd:
+    name: containerd
+    state: restarted
+  become: true
