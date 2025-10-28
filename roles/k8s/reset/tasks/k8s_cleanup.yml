@@ -6,6 +6,10 @@
 
 - name: Remove CNI network interfaces
   ansible.builtin.file:
-    path: /etc/cni/net.d/
+    path: /etc/cni/net.d/*
     state: absent
   become: true
+  notify: restart_containerd
+
+- name: Flush handlers after k8s cleanup
+  ansible.builtin.meta: flush_handlers

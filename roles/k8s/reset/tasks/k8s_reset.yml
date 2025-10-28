@@ -1,4 +1,4 @@
-- name: Reset Kubernetes component
+- name: Reset Kubernetes
   ansible.builtin.shell: "kubeadm reset --force --cri-socket=unix://{{ k8s_container_runtime_socket }}"
   register: reset_k8s
   changed_when: "reset_k8s.rc == 0"
