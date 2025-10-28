@@ -1,2 +1,5 @@
+- name: Install calico plugin 
+  ansible.builtin.include_tasks: install_calico_plugin.yml
+
 - name: Configure CNI
   ansible.builtin.include_tasks: configure_cni_calico.yml
