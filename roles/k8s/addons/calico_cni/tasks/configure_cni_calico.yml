@@ -18,4 +18,6 @@
     - {regexp: "(# )?  value: \"[0-9\\./]*\"", replace: "  value: \"{{ k8s_pod_network_cidr }}\""}
 
 - name: Apply Calico CNI configuration
-  ansible.builtin.command: "kubectl --kubeconfig={{ k8s_kubectl_config_path }} apply -f {{ k8s_cni_directory }}/calico.yml"
+  ansible.builtin.shell: "kubectl --kubeconfig={{ k8s_kubectl_config_path }} apply -f {{ k8s_cni_directory }}/calico.yml"
+  register: apply_calico_cni
+  changed_when: "'created' in apply_calico_cni.stdout or 'configured' in apply_calico_cni.stdout"
