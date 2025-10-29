@@ -1,0 +1,8 @@
+- name: Check if k8s initialized
+  ansible.builtin.stat:
+    path: "/etc/kubernetes/pki/ca.key"
+  register: k8s_initialized
+
+- name: Init k8s cluster
+  ansible.builtin.include_tasks: k8s_init.yml
+  when: "k8s_force_reset or not k8s_initialized.stat.exists"

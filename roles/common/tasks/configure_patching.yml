@@ -1,13 +1,13 @@
 - name: Copy update script to root home directory
-  template:
+  ansible.builtin.template:
     src: "update_script.j2.sh"
     dest: "/root/update_script.sh"
     owner: root
     group: root
-    mode: '0700'
+    mode: '0755'
 
 - name: Configure patching cron job
-  cron:
+  ansible.builtin.cron:
     name: "weekly_patching"
     minute: "15"
     hour: "2"

@@ -1,0 +1,8 @@
+- name: Install Helm Repository
+  ansible.builtin.include_tasks: install_helm_repo.yml
+
+- name: Install Helm
+  ansible.builtin.include_tasks: install_helm.yml
+
+- name: Configure Helm RBAC
+  ansible.builtin.include_tasks: configure_helm_rbac.yml

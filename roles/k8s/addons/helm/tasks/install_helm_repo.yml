@@ -1,0 +1,11 @@
+- name: Get helm release signing key
+  ansible.builtin.shell: 'curl -fsSL https://packages.buildkite.com/helm-linux/helm-debian/gpgkey | sudo gpg --yes --dearmor -o /etc/apt/keyrings/helm-apt-keyring.gpg'
+  become: true
+
+- name: Add in apt source for helm
+  ansible.builtin.apt_repository:
+    repo: 'deb [signed-by=/etc/apt/keyrings/helm-apt-keyring.gpg] https://packages.buildkite.com/helm-linux/helm-debian/any/ any main'
+    state: present
+    filename: 'helm'
+    update_cache: true
+  become: true

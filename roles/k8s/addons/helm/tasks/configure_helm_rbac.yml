@@ -1,0 +1,18 @@
+- name: Create temporary directory
+  ansible.builtin.file:
+    path: "{{ temp_directory }}"
+    state: directory
+    mode: '0755'
+
+- name: Copy RBAC configuration for helm
+  ansible.builtin.template:
+    src: helm_rbac_config.yml.j2
+    dest: "{{ temp_directory }}/helm_rbac_config.yml"
+
+- name: Apply RBAC configuration for helm
+  ansible.builtin.command: "kubectl --kubeconfig={{ k8s_kubectl_config_path }} apply -f {{ temp_directory }}/helm_rbac_config.yml"
+
+- name: Run helm repo update
+  shell: "helm --kubeconfig {{ k8s_kubectl_config_path }} repo update"
+  register: helm_repo_update
+  failed_when: helm_repo_update.rc != 0 and 'no repositories found' not in helm_repo_update.stderr

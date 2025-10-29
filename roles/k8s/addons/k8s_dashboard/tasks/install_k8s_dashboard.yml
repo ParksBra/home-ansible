@@ -1,0 +1,11 @@
+- name: Add k8s dashboard repo to helm
+  ansible.builtin.shell: |
+    helm repo add kubernetes-dashboard https://kubernetes.github.io/dashboard/ --kubeconfig={{ k8s_kubectl_config_path }}
+  register: helm_add_repo
+  changed_when: "'has been added' in helm_add_repo.stdout"
+
+- name: Install k8s dashboard via helm
+  ansible.builtin.shell: |
+    helm upgrade --install kubernetes-dashboard kubernetes-dashboard/kubernetes-dashboard --create-namespace --namespace kubernetes-dashboard --kubeconfig={{ k8s_kubectl_config_path }}
+  register: helm_install_dashboard
+  changed_when: "'Installing it now' in helm_install_dashboard.stdout or 'Upgrading release' in helm_install_dashboard.stdout"

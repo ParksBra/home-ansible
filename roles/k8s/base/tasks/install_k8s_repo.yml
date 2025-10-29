@@ -1,0 +1,11 @@
+- name: Get k8s release signing key
+  ansible.builtin.shell: 'curl -fsSL https://pkgs.k8s.io/core:/stable:/v{{ k8s_base_version }}/deb/Release.key | sudo gpg --yes --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg'
+  become: true
+
+- name: Add in apt source for k8s
+  ansible.builtin.apt_repository:
+    repo: 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v{{ k8s_base_version }}/deb/ /'
+    state: present
+    filename: 'kubernetes'
+    update_cache: true
+  become: true

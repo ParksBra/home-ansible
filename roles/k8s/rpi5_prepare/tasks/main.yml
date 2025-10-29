@@ -1,0 +1,8 @@
+- name: Configure cgroups
+  ansible.builtin.include_tasks: configure_rpi5_cgroups.yml
+
+- name: Configure networking
+  ansible.builtin.include_tasks: configure_rpi5_networking.yml
+
+- name: Configure swap
+  ansible.builtin.include_tasks: configure_rpi5_swap.yml

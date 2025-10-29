@@ -1,0 +1,10 @@
+- name: Install apt repo components
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+  become: true
+  loop:
+    - apt-transport-https
+    - ca-certificates
+    - curl
+    - gpg

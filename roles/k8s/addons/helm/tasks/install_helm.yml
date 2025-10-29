@@ -1,0 +1,5 @@
+- name: Install helm via apt
+  ansible.builtin.apt:
+    name: helm
+    state: present
+  become: true

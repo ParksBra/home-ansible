@@ -1,0 +1,50 @@
+- name: Reset k8s
+  block:
+  - name: Reset k8s
+    ansible.builtin.include_role:
+      name: k8s/reset
+  - name: Set reset success
+    ansible.builtin.set_fact:
+      reset_success: true
+  rescue:
+    - name: Set reset failure
+      ansible.builtin.set_fact:
+        reset_success: false
+
+- name: Create/Init k8s cluster
+  when: reset_success
+  ansible.builtin.shell: |
+    kubeadm init --service-cidr {{ k8s_service_cidr }} \
+                  --kubernetes-version v{{ k8s_version }} \
+                  --pod-network-cidr {{ k8s_pod_network_cidr }} \
+                  --token {{ k8s_discovery_token }} \
+                  --apiserver-advertise-address {{ k8s_apiserver_ip }} \
+                  --apiserver-bind-port {{ k8s_apiserver_port }} \
+                  --cri-socket=unix://{{ k8s_container_runtime_socket }} \
+                  {{ k8s_kubeadm_opts }} \
+                  {{ k8s_init_opts }}
+  register: init_k8s_cluster
+  changed_when: "'Your Kubernetes control-plane has initialized successfully' in init_k8s_cluster.stdout"
+  environment:
+    no_proxy: "$no_proxy,.svc,.svc.cluster.local"
+  no_log: "{{ not debug }}"
+
+- name: Create user k8s directory
+  when: init_k8s_cluster.rc == 0
+  ansible.builtin.file:
+    path: "{{ k8s_kubectl_config_dir }}"
+    state: directory
+    mode: '0700'
+  become: true
+  become_user: "{{ ansible_ssh_user }}"
+
+- name: Copy admin.conf to Home directory
+  when: init_k8s_cluster.rc == 0
+  become: true
+  ansible.builtin.copy:
+    src: "/etc/kubernetes/admin.conf"
+    dest: "{{ k8s_kubectl_config_path }}"
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+    mode: 0700
+    remote_src: true

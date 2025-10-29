@@ -1,0 +1,11 @@
+- name: Get docker release signing key
+  ansible.builtin.shell: 'curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --yes --dearmor -o /etc/apt/keyrings/docker-apt-keyring.gpg'
+  become: true
+
+- name: Add in apt source for docker
+  ansible.builtin.apt_repository:
+    repo: 'deb [arch=arm64 signed-by=/etc/apt/keyrings/docker-apt-keyring.gpg] https://download.docker.com/linux/debian trixie stable'
+    state: present
+    filename: 'docker'
+    update_cache: true
+  become: true

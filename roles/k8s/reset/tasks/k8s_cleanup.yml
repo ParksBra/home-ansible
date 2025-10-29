@@ -1,0 +1,17 @@
+- name: Remove .kube directory
+  ansible.builtin.file:
+    path: "~/.kube/"
+    state: absent
+  become: true
+
+- name: Remove CNI network interfaces
+  ansible.builtin.file:
+    path: /etc/cni/net.d/*
+    state: absent
+  become: true
+
+- name: Restart containerd
+  ansible.builtin.systemd:
+    name: containerd
+    state: restarted
+  become: true
