@@ -76,9 +76,9 @@ pipeline {
                 script {
                     sh 'export DISPLAY=' // Fixes initial hang on pip install
                     sh "python3 -m venv ${WORKSPACE}/.venv"
-                    sh "${WORKSPACE}/.venv/bin/pip install --upgrade pip"
-                    sh "${WORKSPACE}/.venv/bin/pip install -r requirements.txt"
-                    sh "${WORKSPACE}/.venv/bin/ansible-galaxy install -r ${WORKSPACE}/roles/requirements.yml"
+                    sh "${WORKSPACE}/.venv/bin/pip install --no-cache-dir --upgrade pip"
+                    sh "${WORKSPACE}/.venv/bin/pip install --no-cache-dir -r requirements.txt"
+                    sh "${WORKSPACE}/.venv/bin/ansible-galaxy install -r ${WORKSPACE}/roles/requirements.yml --no-cache"
                 }
             }
         }
