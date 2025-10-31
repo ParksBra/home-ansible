@@ -97,12 +97,16 @@ pipeline {
                         if (env.BRANCH_NAME == 'main') {
                             timeout(time: 5, unit: 'MINUTES')
                             {
-                                input(message: "Would you like to still proceed?")
+                                def validation_failure_input = input(message: "Would you like to still proceed?")
+                                if (validation_failure_input != 'Proceed') {
+                                    error("Build aborted due to validation failure.")
+                                } else {
+                                    unstable("Proceeding despite validation failure on main branch.")
+                                }
                             }
                         } else {
                             unstable("Allowing to proceed on non-main branch.")
                         }
-                        
                     }
                 }
             }
