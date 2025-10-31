@@ -1,3 +1,8 @@
+- name: Ensure repo install prerequisites are present
+  ansible.builtin.include_role:
+    name: common
+    tasks_from: install_repo_packages.yml
+
 - name: Get helm release signing key
   ansible.builtin.shell: 'curl -fsSL https://packages.buildkite.com/helm-linux/helm-debian/gpgkey | sudo gpg --yes --dearmor -o /etc/apt/keyrings/helm-apt-keyring.gpg'
   become: true

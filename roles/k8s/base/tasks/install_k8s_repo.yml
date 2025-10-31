@@ -1,3 +1,8 @@
+- name: Ensure repo install prerequisites are present
+  ansible.builtin.include_role:
+    name: common
+    tasks_from: install_repo_packages.yml
+
 - name: Get k8s release signing key
   ansible.builtin.shell: 'curl -fsSL https://pkgs.k8s.io/core:/stable:/v{{ k8s_major_version }}/deb/Release.key | sudo gpg --yes --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg'
   become: true
