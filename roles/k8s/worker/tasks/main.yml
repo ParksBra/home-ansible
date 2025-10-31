@@ -5,4 +5,4 @@
 
 - name: Join k8s cluster
   ansible.builtin.include_tasks: k8s_join.yml
-  when: "k8s_force_reset or not kubelet_configured.stat.exists"
+  when: "k8s_force_reset or k8s_worker_force_reset or not kubelet_configured.stat.exists"
