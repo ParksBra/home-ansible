@@ -74,7 +74,6 @@ pipeline {
             steps {
                 echo 'Preparing environment...'
                 script {
-                    sh 'export DISPLAY=' // Fixes initial hang on pip install
                     sh "python3 -m venv ${WORKSPACE}/.venv"
                     sh "${WORKSPACE}/.venv/bin/pip install --no-cache-dir --upgrade pip"
                     sh "${WORKSPACE}/.venv/bin/pip install --no-cache-dir -r requirements.txt"
