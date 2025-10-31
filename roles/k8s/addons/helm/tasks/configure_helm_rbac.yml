@@ -2,7 +2,7 @@
   ansible.builtin.file:
     path: "{{ temp_directory }}"
     state: directory
-    mode: '0755'
+    mode: 0755
 
 - name: Copy RBAC configuration for helm
   ansible.builtin.template:
