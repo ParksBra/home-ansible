@@ -20,5 +20,6 @@ k8s_apiserver_ip: "{{ hostvars[groups['k8s_controller'][0]]['ansible_default_ipv
 k8s_apiserver_port: 6443
 k8s_kubeadm_opts: ""
 k8s_init_opts: ""
-k8s_discovery_token: "{{ lookup('infisical.vault.read_secrets', secret_name='k8s-discovery-token', path='/', project_id=infiscal_project_id, env_slug=infiscal_environment_slug, url=infiscal_url).value }}"
+k8s_discovery_token_secret_name: "k8s-discovery-token"
+k8s_discovery_token: "{{ lookup('infisical.vault.read_secrets', secret_name=k8s_discovery_token_secret_name, path='/', project_id=infiscal_project_id, env_slug=infiscal_environment_slug, url=infiscal_url).value }}"
 k8s_force_reset: "{{ lookup('env', 'K8S_FORCE_RESET') | default(false) | bool }}"

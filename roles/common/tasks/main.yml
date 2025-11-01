@@ -9,17 +9,11 @@
     name: "{{ inventory_hostname }}"
   when: inventory_hostname is defined
 
-# - name: Create users and groups
-#   include_tasks: configure_user_group.yml
-
 - name: Configure patching
   ansible.builtin.include_tasks: configure_patching.yml
-
-# - name: Configure mounting points
-#   include_tasks: mount_disks.yml
 
 - name: Create temporary directory
   ansible.builtin.file:
     path: "{{ temp_directory }}"
     state: directory
-    mode: '0755'
+    mode: 0755

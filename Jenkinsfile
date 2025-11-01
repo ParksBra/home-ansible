@@ -30,6 +30,11 @@ pipeline {
             description: 'Enable debug logging and display of secrets'
         )
         booleanParam(
+            name: 'RESET_PYTHON_VENV',
+            defaultValue: false,
+            description: 'Force reset of the Python virtual environment'
+        )
+        booleanParam(
             name: 'SKIP_VALIDATION',
             defaultValue: false,
             description: 'Skip validation steps'
@@ -70,14 +75,22 @@ pipeline {
     }
 
     stages {
+        stage('reset-python-venv') {
+            when {
+                expression { return params.RESET_PYTHON_VENV.toBoolean() }
+            }
+            steps {
+                echo 'Resetting Python virtual environment...'
+                sh "rm -rf ${WORKSPACE}/.venv"
+            }
+        }
         stage('setup-environment') {
             steps {
                 echo 'Preparing environment...'
                 script {
-                    sh 'export DISPLAY=' // Fixes initial hang on pip install
                     sh "python3 -m venv ${WORKSPACE}/.venv"
-                    sh "${WORKSPACE}/.venv/bin/pip install --upgrade pip"
-                    sh "${WORKSPACE}/.venv/bin/pip install -r requirements.txt"
+                    sh "${WORKSPACE}/.venv/bin/pip install --no-cache-dir --upgrade pip"
+                    sh "${WORKSPACE}/.venv/bin/pip install --no-cache-dir -r requirements.txt"
                     sh "${WORKSPACE}/.venv/bin/ansible-galaxy install -r ${WORKSPACE}/roles/requirements.yml"
                 }
             }
@@ -97,12 +110,16 @@ pipeline {
                         if (env.BRANCH_NAME == 'main') {
                             timeout(time: 5, unit: 'MINUTES')
                             {
-                                input(message: "Would you like to still proceed?")
+                                def validation_failure_input = input(message: "Would you like to still proceed?")
+                                if (validation_failure_input != 'Proceed') {
+                                    error("Build aborted due to validation failure.")
+                                } else {
+                                    unstable("Proceeding despite validation failure on main branch.")
+                                }
                             }
                         } else {
                             unstable("Allowing to proceed on non-main branch.")
                         }
-                        
                     }
                 }
             }
