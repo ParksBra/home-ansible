@@ -30,6 +30,11 @@ pipeline {
             description: 'Enable debug logging and display of secrets'
         )
         booleanParam(
+            name: 'RESET_PYTHON_VENV',
+            defaultValue: false,
+            description: 'Force reset of the Python virtual environment'
+        )
+        booleanParam(
             name: 'SKIP_VALIDATION',
             defaultValue: false,
             description: 'Skip validation steps'
@@ -74,6 +79,9 @@ pipeline {
             steps {
                 echo 'Preparing environment...'
                 script {
+                    if (params.RESET_PYTHON_VENV.toBoolean()) {
+                        sh "rm -rf ${WORKSPACE}/.venv"
+                    }
                     sh "python3 -m venv ${WORKSPACE}/.venv"
                     sh "${WORKSPACE}/.venv/bin/pip install --no-cache-dir --upgrade pip"
                     sh "${WORKSPACE}/.venv/bin/pip install --no-cache-dir -r requirements.txt"
