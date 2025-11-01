@@ -75,13 +75,19 @@ pipeline {
     }
 
     stages {
+        stage('reset-python-venv') {
+            when {
+                expression { return params.RESET_PYTHON_VENV.toBoolean() }
+            }
+            steps {
+                echo 'Resetting Python virtual environment...'
+                sh "rm -rf ${WORKSPACE}/.venv"
+            }
+        }
         stage('setup-environment') {
             steps {
                 echo 'Preparing environment...'
                 script {
-                    if (params.RESET_PYTHON_VENV.toBoolean()) {
-                        sh "rm -rf ${WORKSPACE}/.venv"
-                    }
                     sh "python3 -m venv ${WORKSPACE}/.venv"
                     sh "${WORKSPACE}/.venv/bin/pip install --no-cache-dir --upgrade pip"
                     sh "${WORKSPACE}/.venv/bin/pip install --no-cache-dir -r requirements.txt"
