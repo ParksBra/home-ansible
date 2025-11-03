@@ -2,7 +2,10 @@
   ansible.builtin.apt:
     update_cache: true
     upgrade: 'safe'
-    state: latest
+    state: 
+    autoclean: true
+    autoremove: true
+  become: true
 
 - name: Set hostname
   ansible.builtin.hostname:
