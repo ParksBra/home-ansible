@@ -1,0 +1,3 @@
+create_zfs_pool: false
+openebs_zfs_pool_name: "openebs_pool"
+openebs_zfs_pool_device: "/dev/sdb"

@@ -1,0 +1,7 @@
+- name: Create ZFS pool for OpenEBS
+  ansible.builtin.shell: |
+    zpool create -f {{ openebs_zfs_pool_name }} {{ openebs_zfs_pool_device }}
+  register: zfs_pool_creation
+  changed_when: "'created' in zfs_pool_creation.stdout"
+  failed_when: zfs_pool_creation.rc != 0 and 'already exists' not in zfs_pool_creation.stderr
+  become: true

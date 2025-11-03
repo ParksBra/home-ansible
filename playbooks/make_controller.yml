@@ -9,5 +9,7 @@
     - {role: calico_cni, tags: ['calico_cni']}
     - {role: k8s/addons/helm, tags: ['helm']}
     - {role: k8s/addons/k8s_dashboard, tags: ['k8s_dashboard']}
+    - {role: zfs, tags: ['zfs']}
+    - {role: k8s/addons/openebs, tags: ['openebs']}
   become: true
   become_user: root

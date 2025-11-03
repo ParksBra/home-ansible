@@ -1,0 +1,6 @@
+- name: Install zfsutils
+  ansible.builtin.include_tasks: install_zfsutils.yml
+
+- name: Create ZFS pool for OpenEBS
+  ansible.builtin.include_tasks: create_zfs_pool.yml
+  when: create_zfs_pool

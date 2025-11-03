@@ -6,5 +6,6 @@
     - {role: docker, tags: ['docker']}
     - {role: k8s/base, tags: ['k8s_base']}
     - {role: k8s/worker, tags: ['k8s_worker']}
+    - {role: zfs, tags: ['zfs']}
   become: true
   become_user: root
