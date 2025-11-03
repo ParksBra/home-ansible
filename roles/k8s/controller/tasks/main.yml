@@ -2,6 +2,7 @@
   ansible.builtin.stat:
     path: "/etc/kubernetes/pki/ca.key"
   register: k8s_initialized
+  become: true
 
 - name: Init k8s cluster
   ansible.builtin.include_tasks: k8s_init.yml

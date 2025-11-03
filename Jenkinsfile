@@ -146,6 +146,24 @@ pipeline {
                 }
             }
         }
+        stage('setup-cluster-addons') {
+            steps {
+                withCredentials([sshUserPrivateKey(credentialsId: params.WORKER_SSH_KEY, usernameVariable: 'ssh_user', keyFileVariable: 'ssh_key_path'), usernamePassword(credentialsId: params.INFISICAL_IDENTITY, usernameVariable: 'infisical_identity_client_id', passwordVariable: 'infisical_identity_secret')]) {
+                    echo 'Running setup_addons Ansible playbook on workers...'
+                    setup_env_vars(ssh_user, ssh_key_path, infisical_identity_client_id, infisical_identity_secret)
+                    script {
+                        sh "${WORKSPACE}/.venv/bin/ansible-playbook '${WORKSPACE}/playbooks/setup_addons.yml' -l 'k8s_worker' ${ansible_opts}"
+                    }
+                }
+                withCredentials([sshUserPrivateKey(credentialsId: params.CONTROLLER_SSH_KEY, usernameVariable: 'ssh_user', keyFileVariable: 'ssh_key_path'), usernamePassword(credentialsId: params.INFISICAL_IDENTITY, usernameVariable: 'infisical_identity_client_id', passwordVariable: 'infisical_identity_secret')]) {
+                    echo 'Running setup_addons Ansible playbook on controller...'
+                    setup_env_vars(ssh_user, ssh_key_path, infisical_identity_client_id, infisical_identity_secret)
+                    script {
+                        sh "${WORKSPACE}/.venv/bin/ansible-playbook '${WORKSPACE}/playbooks/setup_addons.yml' -l 'k8s_controller' ${ansible_opts}"
+                    }
+                }
+            }
+        }
     }
     // Post work actions
     post {
