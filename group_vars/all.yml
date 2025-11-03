@@ -25,4 +25,4 @@ k8s_discovery_token: "{{ lookup('infisical.vault.read_secrets', secret_name=k8s_
 k8s_force_reset: "{{ lookup('env', 'K8S_FORCE_RESET') | default(false) | bool }}"
 
 openebs_zfs_pool_name: "zfspv-pool"
-openebs_zfs_pool_device: "/dev/sdb"
+openebs_zfs_pool_device: "/dev/sda1"
