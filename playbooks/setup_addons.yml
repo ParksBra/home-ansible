@@ -13,5 +13,6 @@
     - {role: k8s/addons/k8s_dashboard, tags: ['k8s_dashboard']}
     - {role: zfs, tags: ['zfs']}
     - {role: k8s/addons/openebs, tags: ['openebs']}
+    - {role: k8s/addons/ingress_nginx, tags: ['ingress_nginx']}
   become: true
   become_user: root
