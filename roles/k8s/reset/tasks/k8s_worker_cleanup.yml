@@ -1,4 +1,6 @@
 - name: Reset workers
-  ansible.builtin.include_tasks: k8s_reset.yml
+  ansible.builtin.include_role:
+    name: k8s/reset
+    tasks_from: k8s_reset.yml
   delegate_to: "{{ item }}"
   loop: "{{ groups['k8s_worker'] }}"
