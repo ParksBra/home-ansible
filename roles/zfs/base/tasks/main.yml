@@ -2,5 +2,5 @@
   ansible.builtin.apt:
     name: zfsutils-linux
     state: present
-    update_cache: yes
+    update_cache: true
   become: true

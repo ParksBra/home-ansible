@@ -1,17 +1,14 @@
 ---
 - hosts: k8s_worker
   roles:
-    - {role: common, tags: ['common']}
-    - {role: zfs, tags: ['zfs']}
+    - {role: zfs/zpool_member, tags: ['zfs']}
   become: true
   become_user: root
 
 - hosts: k8s_controller
   roles:
-    - {role: common, tags: ['common']}
-    - {role: k8s/addons/helm, tags: ['helm']}
     - {role: k8s/addons/k8s_dashboard, tags: ['k8s_dashboard']}
-    - {role: zfs, tags: ['zfs']}
+    - {role: zfs/base, tags: ['zfs']}
     - {role: k8s/addons/openebs, tags: ['openebs']}
     - {role: k8s/addons/ingress_nginx, tags: ['ingress_nginx']}
     - {role: k8s/addons/akri, tags: ['akri']}

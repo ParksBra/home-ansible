@@ -6,6 +6,6 @@
     - {role: docker, tags: ['docker']}
     - {role: k8s/base, tags: ['k8s_base']}
     - {role: k8s/controller, tags: ['k8s_controller']}
-    - {role: calico_cni, tags: ['calico_cni']}
+    - {role: cni/calico/helm, tags: ['calico_cni']}
   become: true
   become_user: root

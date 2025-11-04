@@ -1,2 +1,20 @@
-- name: Install akri
-  ansible.builtin.include_tasks: install_akri.yml
+- name: Add akri repo to helm
+  kubernetes.core.helm_repository:
+    name: akri
+    repo_url: https://project-akri.github.io/akri
+    kubeconfig: "{{ k8s_kubectl_config_path }}"
+
+- name: Install akri via helm
+  kubernetes.core.helm:
+    name: akri
+    chart_ref: akri/akri
+    namespace: akri
+    create_namespace: true
+    release_values:
+      udev:
+        discovery:
+          enabled: true
+      kubernetesDistro: k8s
+    kubeconfig: "{{ k8s_kubectl_config_path }}"
+    update_repo_cache: true
+    state: present

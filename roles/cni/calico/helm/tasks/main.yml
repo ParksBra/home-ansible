@@ -1,0 +1,5 @@
+- name: Install calicocli
+  ansible.builtin.include_tasks: install_calicocli.yml
+
+- name: Install tigera-operator via helm
+  ansible.builtin.include_tasks: install_tigera_operator.yml
