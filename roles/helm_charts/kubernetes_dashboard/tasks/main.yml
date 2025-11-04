@@ -3,6 +3,7 @@
     name: kubernetes-dashboard
     repo_url: https://kubernetes.github.io/dashboard
     kubeconfig: "{{ k8s_kubectl_config_path }}"
+    force_update: true
 
 - name: Install kubernetes-dashboard via helm
   kubernetes.core.helm:

@@ -3,6 +3,7 @@
     name: akri
     repo_url: https://project-akri.github.io/akri
     kubeconfig: "{{ k8s_kubectl_config_path }}"
+    force_update: true
 
 - name: Install akri via helm
   kubernetes.core.helm:

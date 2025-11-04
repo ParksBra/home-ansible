@@ -7,10 +7,9 @@
 
 - hosts: k8s_controller
   roles:
-    - {role: k8s/addons/k8s_dashboard, tags: ['k8s_dashboard']}
-    - {role: zfs/base, tags: ['zfs']}
-    - {role: k8s/addons/openebs, tags: ['openebs']}
-    - {role: k8s/addons/ingress_nginx, tags: ['ingress_nginx']}
-    - {role: k8s/addons/akri, tags: ['akri']}
+    - {role: helm_charts/kubernetes_dashboard, tags: ['kubernetes_dashboard']}
+    - {role: helm_charts/openebs, tags: ['openebs']}
+    - {role: helm_charts/ingress_nginx, tags: ['ingress_nginx']}
+    - {role: helm_charts/akri, tags: ['akri']}
   become: true
   become_user: root

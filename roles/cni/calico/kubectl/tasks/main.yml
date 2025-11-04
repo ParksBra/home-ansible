@@ -1,5 +1,23 @@
-- name: Install calico plugin 
-  ansible.builtin.include_tasks: install_calico_plugin.yml
+- name: Create CNI directory
+  ansible.builtin.file:
+    path: "{{ temp_directory }}"
+    state: directory
 
-- name: Configure CNI
-  ansible.builtin.include_tasks: configure_cni_calico.yml
+- name: Pull Calico k8s setup
+  ansible.builtin.get_url:
+    url: "https://raw.githubusercontent.com/projectcalico/calico/v{{ k8s_cni_calico_version }}/manifests/calico.yaml"
+    dest: "{{ temp_directory }}/calico.yml"
+
+- name: Update Calico ip pool
+  ansible.builtin.replace:
+    path: "{{ temp_directory }}/calico.yml"
+    regexp: "{{ item.regexp }}"
+    replace: "{{ item.replace }}"
+  with_items:
+    - {regexp: "(# )?- name: CALICO_IPV4POOL_CIDR", replace: "- name: CALICO_IPV4POOL_CIDR"}
+    - {regexp: "(# )?  value: \"[0-9\\./]*\"", replace: "  value: \"{{ k8s_pod_network_cidr }}\""}
+
+- name: Apply Calico CNI configuration
+  ansible.builtin.shell: "kubectl --kubeconfig={{ k8s_kubectl_config_path }} apply -f {{ temp_directory }}/calico.yml"
+  register: apply_calico_cni
+  changed_when: "'created' in apply_calico_cni.stdout or 'configured' in apply_calico_cni.stdout"

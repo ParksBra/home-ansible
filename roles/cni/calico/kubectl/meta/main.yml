@@ -1,3 +1,2 @@
 dependencies:
   - role: cni/calico/calicoctl
-  - role: helm

@@ -3,6 +3,7 @@
     name: openebs
     repo_url: https://openebs.github.io/openebs
     kubeconfig: "{{ k8s_kubectl_config_path }}"
+    force_update: true
 
 - name: Install openebs via helm
   kubernetes.core.helm:
