@@ -1,4 +1,4 @@
-- name: Async reset workers
+- name: Reset worker
   ansible.builtin.import_role:
     name: k8s/reset
     tasks_from: k8s_reset.yml
