@@ -7,23 +7,7 @@
   - name: Reset worker hosts if controller reset
     when: reset_success
     ansible.builtin.include_tasks: k8s_worker_reset_loop.yml
-    async: 120
-    poll: 0
-    register: async_reset_workers_results
     loop: "{{ groups['k8s_worker'] }}"
-    loop_control:
-      loop_var: async_item
-
-  - name: Wait for async reset workers to complete
-    ansible.builtin.async_status:
-      jid: "{{ async_result_item.ansible_job_id }}"
-    register: job_result
-    until: job_result.finished
-    retries: 60
-    delay: 2
-    loop: "{{ async_reset_workers_results.results }}"
-    loop_control:
-      loop_var: async_result_item
 
   - name: Set reset success
     ansible.builtin.set_fact:

@@ -2,4 +2,4 @@
   ansible.builtin.import_role:
     name: k8s/reset
     tasks_from: k8s_reset.yml
-  delegate_to: "{{ async_item }}"
+  delegate_to: "{{ item }}"
