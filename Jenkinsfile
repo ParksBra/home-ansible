@@ -1,6 +1,9 @@
-def setup_env_vars(ssh_user, ssh_key_path, infisical_identity_client_id, infisical_identity_secret) {
-    env.SSH_USER = ssh_user
-    env.SSH_KEY_PATH = ssh_key_path
+def setup_env_vars(controller_ssh_user, controller_ssh_key_path, worker_ssh_user, worker_ssh_key_path, infisical_identity_client_id, infisical_identity_secret) {
+    env.CONTROLLER_SSH_USER = controller_ssh_user
+    env.CONTROLLER_SSH_KEY_PATH = controller_ssh_key_path
+    
+    env.WORKER_SSH_USER = worker_ssh_user
+    env.WORKER_SSH_KEY_PATH = worker_ssh_key_path
 
     env.DEBUG = params.DEBUG
 
@@ -124,42 +127,24 @@ pipeline {
                 }
             }
         }
-        stage('make-k8s-controller') {
+        stage('make-k8s-cluster') {
             steps {
-                withCredentials([sshUserPrivateKey(credentialsId: params.CONTROLLER_SSH_KEY, usernameVariable: 'ssh_user', keyFileVariable: 'ssh_key_path'), usernamePassword(credentialsId: params.INFISICAL_IDENTITY, usernameVariable: 'infisical_identity_client_id', passwordVariable: 'infisical_identity_secret')]) {
-                    echo 'Running make_server Ansible playbook on controller...'
-                    setup_env_vars(ssh_user, ssh_key_path, infisical_identity_client_id, infisical_identity_secret)
+                withCredentials([sshUserPrivateKey(credentialsId: params.CONTROLLER_SSH_KEY, usernameVariable: 'controller_ssh_user', keyFileVariable: 'controller_ssh_key_path'), sshUserPrivateKey(credentialsId: params.WORKER_SSH_KEY, usernameVariable: 'worker_ssh_user', keyFileVariable: 'worker_ssh_key_path'), usernamePassword(credentialsId: params.INFISICAL_IDENTITY, usernameVariable: 'infisical_identity_client_id', passwordVariable: 'infisical_identity_secret')]) {
+                    echo 'Running make_cluster Ansible playbook...'
+                    setup_env_vars(controller_ssh_user, controller_ssh_key_path, worker_ssh_user, worker_ssh_key_path, infisical_identity_client_id, infisical_identity_secret)
                     script {
-                        sh "${WORKSPACE}/.venv/bin/ansible-playbook '${WORKSPACE}/playbooks/make_controller.yml' -l 'k8s_controller' ${ansible_opts}"
-                    }
-                }
-            }
-        }
-        stage('make-k8s-workers') {
-            steps {
-                withCredentials([sshUserPrivateKey(credentialsId: params.WORKER_SSH_KEY, usernameVariable: 'ssh_user', keyFileVariable: 'ssh_key_path'), usernamePassword(credentialsId: params.INFISICAL_IDENTITY, usernameVariable: 'infisical_identity_client_id', passwordVariable: 'infisical_identity_secret')]) {
-                    echo 'Running make_server Ansible playbook on workers...'
-                    setup_env_vars(ssh_user, ssh_key_path, infisical_identity_client_id, infisical_identity_secret)
-                    script {
-                        sh "${WORKSPACE}/.venv/bin/ansible-playbook '${WORKSPACE}/playbooks/make_worker.yml' -l 'k8s_worker' ${ansible_opts}"
+                        sh "${WORKSPACE}/.venv/bin/ansible-playbook '${WORKSPACE}/playbooks/make_cluster.yml' ${ansible_opts}"
                     }
                 }
             }
         }
         stage('setup-cluster-addons') {
             steps {
-                withCredentials([sshUserPrivateKey(credentialsId: params.WORKER_SSH_KEY, usernameVariable: 'ssh_user', keyFileVariable: 'ssh_key_path'), usernamePassword(credentialsId: params.INFISICAL_IDENTITY, usernameVariable: 'infisical_identity_client_id', passwordVariable: 'infisical_identity_secret')]) {
+                withCredentials([sshUserPrivateKey(credentialsId: params.CONTROLLER_SSH_KEY, usernameVariable: 'controller_ssh_user', keyFileVariable: 'controller_ssh_key_path'), sshUserPrivateKey(credentialsId: params.WORKER_SSH_KEY, usernameVariable: 'worker_ssh_user', keyFileVariable: 'worker_ssh_key_path'), usernamePassword(credentialsId: params.INFISICAL_IDENTITY, usernameVariable: 'infisical_identity_client_id', passwordVariable: 'infisical_identity_secret')]) {
                     echo 'Running setup_addons Ansible playbook on workers...'
-                    setup_env_vars(ssh_user, ssh_key_path, infisical_identity_client_id, infisical_identity_secret)
+                    setup_env_vars(controller_ssh_user, controller_ssh_key_path, worker_ssh_user, worker_ssh_key_path, infisical_identity_client_id, infisical_identity_secret)
                     script {
-                        sh "${WORKSPACE}/.venv/bin/ansible-playbook '${WORKSPACE}/playbooks/setup_addons.yml' -l 'k8s_worker' ${ansible_opts}"
-                    }
-                }
-                withCredentials([sshUserPrivateKey(credentialsId: params.CONTROLLER_SSH_KEY, usernameVariable: 'ssh_user', keyFileVariable: 'ssh_key_path'), usernamePassword(credentialsId: params.INFISICAL_IDENTITY, usernameVariable: 'infisical_identity_client_id', passwordVariable: 'infisical_identity_secret')]) {
-                    echo 'Running setup_addons Ansible playbook on controller...'
-                    setup_env_vars(ssh_user, ssh_key_path, infisical_identity_client_id, infisical_identity_secret)
-                    script {
-                        sh "${WORKSPACE}/.venv/bin/ansible-playbook '${WORKSPACE}/playbooks/setup_addons.yml' -l 'k8s_controller' ${ansible_opts}"
+                        sh "${WORKSPACE}/.venv/bin/ansible-playbook '${WORKSPACE}/playbooks/setup_addons.yml' ${ansible_opts}"
                     }
                 }
             }
