@@ -1,18 +1,8 @@
-- name: Reset k8s
-  block:
-  - name: Reset k8s
-    ansible.builtin.include_role:
-      name: k8s/reset
-  - name: Set reset success
-    ansible.builtin.set_fact:
-      reset_success: true
-  rescue:
-    - name: Set reset failure
-      ansible.builtin.set_fact:
-        reset_success: false
+- name: Reset cluster
+  ansible.builtin.include_tasks: k8s_reset_cluster.yml
 
 - name: Create/Init k8s cluster
-  when: reset_success
+  when: "{{ reset_success | default(true) }}"
   ansible.builtin.shell: |
     kubeadm init --service-cidr {{ k8s_service_cidr }} \
                   --kubernetes-version v{{ k8s_version }} \

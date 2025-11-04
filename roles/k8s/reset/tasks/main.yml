@@ -1,6 +1,2 @@
 - name: Reset k8s
   ansible.builtin.include_tasks: k8s_reset.yml
-
-- name: Trigger worker reset if controller reset
-  ansible.builtin.include_tasks: k8s_worker_cleanup.yml
-  when: "'k8s_controller' in group_names"
