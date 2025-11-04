@@ -11,7 +11,7 @@
     chart_version: "{{ k8s_cni_version }}"
     namespace: tigera-operator
     create_namespace: true
-    chart_values:
+    release_values:
       installation:
         calicoNetwork:
           ipPools:
