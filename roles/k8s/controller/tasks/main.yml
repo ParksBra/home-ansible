@@ -7,9 +7,3 @@
 - name: Init k8s cluster
   ansible.builtin.include_tasks: k8s_init.yml
   when: "k8s_force_reset or not k8s_initialized.stat.exists"
-
-- name: Trigger worker reset if controller reset
-  ansible.builtin.set_fact:
-    k8s_worker_force_reset: "{{ k8s_force_reset }}"
-    cacheable: true
-  when: "k8s_force_reset or not k8s_initialized.stat.exists"
