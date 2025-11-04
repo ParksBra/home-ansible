@@ -3,6 +3,7 @@
     name: projectcalico
     repo_url: https://docs.tigera.io/calico/charts
     kubeconfig: "{{ k8s_kubectl_config_path }}"
+    force_update: true
 
 - name: Install calico via helm
   kubernetes.core.helm:
