@@ -2,7 +2,7 @@
   ansible.builtin.include_tasks: k8s_reset_cluster.yml
 
 - name: Create/Init k8s cluster
-  when: "{{ reset_success | default(true) }}"
+  when: reset_success
   ansible.builtin.shell: |
     kubeadm init --service-cidr {{ k8s_service_cidr }} \
                   --kubernetes-version v{{ k8s_version }} \
@@ -18,6 +18,7 @@
   environment:
     no_proxy: "$no_proxy,.svc,.svc.cluster.local"
   no_log: "{{ not debug }}"
+  any_errors_fatal: true
 
 - name: Create user k8s directory
   when: init_k8s_cluster.rc == 0
