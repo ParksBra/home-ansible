@@ -34,7 +34,7 @@ ingress_nginx_service_cluster_ip: "{{ k8s_service_cidr | ansible.utils.nthhost(-
 
 nginx_user: "nginx"
 nginx_group: "nginx"
-nginx_worker_processes: 1
+nginx_worker_processes: "{{ ansible_processor_vcpus | default(1) }}"
 nginx_worker_connections: 1024
 nginx_external_port: 443
 nginx_external_network_server_name: "parkl.ee"
