@@ -1,0 +1,5 @@
+- name: Create k8s secrets for homeassistant
+  import_tasks: create_secrets.yml
+
+- name: Install helm charts for homeassistant environment
+  import_tasks: install_charts.yml

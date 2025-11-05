@@ -1,0 +1,12 @@
+- name: Install cert-manager via helm
+  kubernetes.core.helm:
+    name: cert-manager
+    chart_ref: oci://quay.io/jetstack/charts/cert-manager
+    namespace: cert-manager
+    create_namespace: true
+    kubeconfig: "{{ k8s_kubectl_config_path }}"
+    release_values:
+      crds:
+        enabled: true
+    update_repo_cache: true
+    state: present

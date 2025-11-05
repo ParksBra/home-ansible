@@ -1,0 +1,89 @@
+- name: Add home-k8s repo to helm
+  kubernetes.core.helm_repository:
+    name: home-k8s
+    repo_url: https://parksbra.github.io/home-k8s
+    kubeconfig: "{{ k8s_kubectl_config_path }}"
+    force_update: true
+
+- name: Install home-k8s/homeassistant via helm
+  kubernetes.core.helm:
+    name: homeassistant
+    chart_ref: home-k8s/homeassistant
+    namespace: "{{ homeassistant_namespace }}"
+    create_namespace: true
+    release_values:
+      homeassistant:
+        ingress:
+          subDomain: "{{ homeassistant_sub_domain }}"
+          servicePort: "{{ homeassistant_service_port }}"
+        volume:
+          data:
+            size: "{{ homeassistant_data_volume_size }}"
+          time:
+            size: "{{ homeassistant_time_volume_size }}"
+    kubeconfig: "{{ k8s_kubectl_config_path }}"
+    update_repo_cache: true
+    state: present
+
+- name: Install home-k8s/mosquitto via helm
+  kubernetes.core.helm:
+    name: mosquitto
+    chart_ref: home-k8s/mosquitto
+    namespace: "{{ homeassistant_namespace }}"
+    create_namespace: true
+    release_values:
+      mosquitto:
+        ingress:
+          subDomain: "{{ mosquitto_sub_domain }}"
+          websocketPort: "{{ mosquitto_websocket_port }}"
+          tlsPort: "{{ mosquitto_tls_port }}"
+        account:
+          username: "{{ mosquitto_username }}"
+          password: "{{ mosquitto_password }}"
+        volume:
+          data:
+            size: "{{ mosquitto_data_volume_size }}"
+    kubeconfig: "{{ k8s_kubectl_config_path }}"
+    update_repo_cache: true
+    state: present
+
+- name: Install home-k8s/zigbee2mqtt via helm
+  kubernetes.core.helm:
+    name: zigbee2mqtt
+    chart_ref: home-k8s/zigbee2mqtt
+    namespace: "{{ homeassistant_namespace }}"
+    create_namespace: true
+    release_values:
+      zigbee2mqtt:
+        ingress:
+          subDomain: "{{ zigbee2mqtt_sub_domain }}"
+          servicePort: "{{ zigbee2mqtt_service_port }}"
+        radio:
+          vendorId: "{{ zigbee2mqtt_radio_vendor_id }}"
+          productId: "{{ zigbee2mqtt_radio_product_id }}"
+        volume:
+          data:
+            size: "{{ zigbee2mqtt_data_volume_size }}"
+    kubeconfig: "{{ k8s_kubectl_config_path }}"
+    update_repo_cache: true
+    state: present
+
+- name: Install home-k8s/network via helm
+  kubernetes.core.helm:
+    name: network
+    chart_ref: home-k8s/network
+    namespace: "{{ homeassistant_namespace }}"
+    create_namespace: true
+    release_values:
+      network:
+        certmanager:
+          clusterissuer:
+            acme:
+              email: "{{ homeassistant_network_acme_email }}"
+            dns01:
+              cloudflare:
+                apiTokenSecretName: "{{ cloudflare_api_token_secret_name }}"
+                apiTokenSecretKey: "api-token"
+    kubeconfig: "{{ k8s_kubectl_config_path }}"
+    update_repo_cache: true
+    state: present
