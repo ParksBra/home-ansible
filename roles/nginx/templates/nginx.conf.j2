@@ -16,11 +16,8 @@ http {
         listen {{ nginx_external_port }} ssl;
         listen [::]:{{ nginx_external_port }} ssl;
         server_name *.{{ nginx_external_network_server_name }};
-        include /config/nginx/ssl.conf;
         client_max_body_size 0;
         location / {
-            include /config/nginx/proxy.conf;
-            include /config/nginx/resolver.conf;
             set $upstream_service {{ nginx_upstream_service }};
             set $upstream_port {{ nginx_upstream_port }};
             set $upstream_proto {{ nginx_upstream_proto }};
@@ -36,8 +33,6 @@ http {
         deny all;
         client_max_body_size 0;
         location / {
-            include /config/nginx/proxy.conf;
-            include /config/nginx/resolver.conf;
             set $upstream_service {{ nginx_upstream_service }};
             set $upstream_port {{ nginx_upstream_port }};
             set $upstream_proto {{ nginx_upstream_proto }};
