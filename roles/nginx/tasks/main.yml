@@ -6,3 +6,6 @@
 
 - name: Apply nginx configuration
   ansible.builtin.include_tasks: apply_configuration.yml
+
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers
