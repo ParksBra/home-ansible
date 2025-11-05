@@ -30,16 +30,18 @@ openebs_zfs_pool_device: "/dev/sda1"
 ingress_nginx_service_type: "NodePort"
 ingress_nginx_service_http_node_port: 30080
 ingress_nginx_service_https_node_port: 30443
+ingress_nginx_service_cluster_ip: "{{ k8s_service_cidr | ansible.utils.nthhost(-16) }}"
 
 nginx_user: "nginx"
 nginx_group: "nginx"
 nginx_worker_processes: 1
 nginx_worker_connections: 1024
-nginx_external_port: "{{ ingress_nginx_service_https_node_port }}"
-nginx_internal_port: "{{ ingress_nginx_service_http_node_port }}"
-nginx_local_network_server_name: "localhost"
-nginx_local_network_cidr: "192.168.1.0/24"
-nginx_upstream_service: "localhost"
-nginx_upstream_port: 80
+nginx_external_port: 443
+nginx_external_network_server_name: "parkl.ee"
+nginx_internal_port: 80
+nginx_internal_network_server_name: "{{ ansible_default_ipv4 }}"
+nginx_internal_network_cidr: "192.168.1.0/24"
+nginx_upstream_service: "{{ ingress_nginx_service_cluster_ip }}"
+nginx_upstream_port: "{{ ingress_nginx_service_http_node_port }}"
 nginx_upstream_proto: "http"
-nginx_domain: "example.com"
+
