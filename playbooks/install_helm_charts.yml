@@ -11,5 +11,6 @@
     - {role: helm_charts/openebs, tags: ['openebs']}
     - {role: helm_charts/ingress_nginx, tags: ['ingress_nginx']}
     - {role: helm_charts/akri, tags: ['akri']}
+    - {role: nginx, tags: ['nginx']}
   become: true
   become_user: root
