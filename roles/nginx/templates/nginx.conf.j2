@@ -31,7 +31,8 @@ http {
         listen {{ nginx_internal_port }} default_server;
         listen [::]:{{ nginx_internal_port }};
         server_name *.{{ nginx_internal_network_server_name }};
-        allow {{ nginx_internal_network_cidr }};
+        {% for cidr in nginx_internal_network_allowed_cidrs %}allow {{ cidr }};
+        {% endfor %}
         deny all;
         client_max_body_size 0;
         location / {

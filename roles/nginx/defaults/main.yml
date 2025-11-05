@@ -5,7 +5,7 @@ nginx_external_port: 443
 nginx_external_network_server_name: "example.com"
 nginx_internal_port: 80
 nginx_internal_network_server_name: "localhost"
-nginx_internal_network_cidr: "192.168.1.0/24"
+nginx_internal_network_allowed_cidrs: ["192.168.1.0/24"]
 nginx_upstream_service: "localhost"
 nginx_upstream_port: 80
 nginx_upstream_proto: "http"
