@@ -5,7 +5,7 @@
   ansible.builtin.include_tasks: install_nginx.yml
 
 - name: Apply nginx configuration
-  ansible.builtin.include_tasks: apply_configuration.yml
+  ansible.builtin.include_tasks: apply_nginx_configuration.yml
 
 - name: Flush handlers
   ansible.builtin.meta: flush_handlers

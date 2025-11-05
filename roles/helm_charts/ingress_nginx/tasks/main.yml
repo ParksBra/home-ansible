@@ -16,9 +16,8 @@
       controller:
         service:
           type: "{{ ingress_nginx_service_type }}"
-          httpPort:
-            nodePort: "{{ ingress_nginx_service_http_node_port }}"
-          httpsPort:
-            nodePort: "{{ ingress_nginx_service_https_node_port }}"
+          nodePorts:
+            http: "{{ ingress_nginx_service_http_node_port }}"
+            https: "{{ ingress_nginx_service_https_node_port }}"
     update_repo_cache: true
     state: present
