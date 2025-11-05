@@ -1,0 +1,59 @@
+user {{ nginx_user }} {{ nginx_group }};
+
+worker_processes {{ nginx_worker_processes }};
+
+events {
+    worker_connections {{ nginx_worker_connections }};
+}
+
+http {
+    include mime.types;
+    default_type application/octet-stream;
+    sendfile on;
+    keepalive_timeout 65;
+
+    server {
+        listen {{ nginx_external_port }} ssl;
+        listen [::]:{{ nginx_external_port }} ssl;
+        server_name *.{{ nginx_domain }};
+        include /config/nginx/ssl.conf;
+        client_max_body_size 0;
+        location / {
+            include /config/nginx/proxy.conf;
+            include /config/nginx/resolver.conf;
+            set $upstream_service {{ nginx_upstream_service }};
+            set $upstream_port {{ nginx_upstream_port }};
+            set $upstream_proto {{ nginx_upstream_proto }};
+            proxy_pass $upstream_proto://$upstream_service:$upstream_port;
+        }
+    }
+    server {
+        listen {{ nginx_internal_port }} default_server;
+        listen [::]:{{ nginx_internal_port }};
+        server_name *.{{ nginx_local_network_server_name }};
+        allow {{ nginx_local_network_cidr }};
+        deny all;
+        client_max_body_size 0;
+        location / {
+            include /config/nginx/proxy.conf;
+            include /config/nginx/resolver.conf;
+            set $upstream_service {{ nginx_upstream_service }};
+            set $upstream_port {{ nginx_internal_port }};
+            set $upstream_proto {{ nginx_upstream_proto }};
+            proxy_pass $upstream_proto://$upstream_service:$upstream_port;
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

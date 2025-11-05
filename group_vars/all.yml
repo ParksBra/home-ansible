@@ -26,3 +26,20 @@ k8s_force_reset: "{{ lookup('env', 'K8S_FORCE_RESET') | default(false) | bool }}
 
 openebs_zfs_pool_name: "zfspv-pool"
 openebs_zfs_pool_device: "/dev/sda1"
+
+ingress_nginx_service_type: "NodePort"
+ingress_nginx_service_http_node_port: 30080
+ingress_nginx_service_https_node_port: 30443
+
+nginx_user: "nginx"
+nginx_group: "nginx"
+nginx_worker_processes: 1
+nginx_worker_connections: 1024
+nginx_external_port: "{{ ingress_nginx_service_https_node_port }}"
+nginx_internal_port: "{{ ingress_nginx_service_http_node_port }}"
+nginx_local_network_server_name: "localhost"
+nginx_local_network_cidr: "192.168.1.0/24"
+nginx_upstream_service: "localhost"
+nginx_upstream_port: 80
+nginx_upstream_proto: "http"
+nginx_domain: "example.com"
