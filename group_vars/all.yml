@@ -49,7 +49,7 @@ nginx_upstream_proto: "http"
 
 homeassistant_namespace: "homeassistant"
 homeassistant_sub_domain: "home"
-homeassistant_service_port: 80
+homeassistant_service_port: 8123
 homeassistant_data_volume_size: "64Gi"
 homeassistant_time_volume_size: "8Gi"
 
@@ -61,7 +61,7 @@ mosquitto_password_secret_name: "mosquitto-account-password"
 mosquitto_password: "{{ lookup('infisical.vault.read_secrets', secret_name=mosquitto_password_secret_name, path='/', project_id=infiscal_project_id, env_slug=infiscal_environment_slug, url=infiscal_url).value }}"
 mosquitto_data_volume_size: "8Gi"
 
-zigbee2mqtt_service_port: 80
+zigbee2mqtt_service_port: 8080
 zigbee2mqtt_sub_domain: "z2m.{{ homeassistant_sub_domain }}"
 zigbee2mqtt_radio_vendor_id: "10c4"
 zigbee2mqtt_radio_product_id: "ea60"
