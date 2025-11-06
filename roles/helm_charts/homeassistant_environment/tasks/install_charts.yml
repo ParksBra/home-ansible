@@ -86,6 +86,19 @@
               cloudflare:
                 apiTokenSecretName: "{{ cloudflare_api_token_secret_name }}"
                 apiTokenSecretKey: "api-token"
+      homeassistant:
+        ingress:
+          subDomain: "{{ homeassistant_sub_domain }}"
+          servicePort: "{{ homeassistant_service_port }}"
+      mosquitto:
+        ingress:
+          subDomain: "{{ mosquitto_sub_domain }}"
+          websocketPort: "{{ mosquitto_websocket_port }}"
+          tlsPort: "{{ mosquitto_tls_port }}"
+      zigbee2mqtt:
+        ingress:
+          subDomain: "{{ zigbee2mqtt_sub_domain }}"
+          servicePort: "{{ zigbee2mqtt_service_port }}"
     kubeconfig: "{{ k8s_kubectl_config_path }}"
     update_repo_cache: true
     state: present
