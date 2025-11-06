@@ -1,5 +1,7 @@
 debug: "{{ lookup('env', 'DEBUG') | default(false) | bool }}"
 
+ansible_python_interpreter: "/usr/bin/python3.13"
+
 temp_directory: "/tmp/ansible_home"
 
 infiscal_url: "{{ lookup('env', 'INFISCAL_URL') }}"
