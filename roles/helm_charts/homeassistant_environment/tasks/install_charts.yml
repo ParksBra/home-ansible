@@ -85,7 +85,7 @@
             dns01:
               cloudflare:
                 apiTokenSecretName: "{{ cloudflare_api_token_secret_name }}"
-                apiTokenSecretKey: "api-token"
+                apiTokenSecretKey: "api-key"
       homeassistant:
         ingress:
           subDomain: "{{ homeassistant_sub_domain }}"
