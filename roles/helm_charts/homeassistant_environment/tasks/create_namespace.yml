@@ -1,0 +1,11 @@
+- name: Create environment namespace
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Namespace
+      metadata:
+        name: "{{ homeassistant_namespace }}"
+        labels:
+          name: "{{ homeassistant_namespace }}"
+    kubeconfig: "{{ k8s_kubectl_config_path }}"

@@ -1,3 +1,6 @@
+- name: Create environment namespace
+  import_tasks: create_namespace.yml
+
 - name: Create k8s secrets for homeassistant
   import_tasks: create_secrets.yml
 
