@@ -1,0 +1,5 @@
+- name: Install kubernetes python library
+  ansible.builtin.pip:
+    name: "kubernetes=={{ k8s_python_version }}"
+    state: present
+  become: true

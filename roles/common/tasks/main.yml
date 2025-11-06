@@ -15,6 +15,9 @@
 - name: Configure patching
   ansible.builtin.include_tasks: configure_patching.yml
 
+- name: Configure k8s python library
+  ansible.builtin.include_tasks: setup_python_k8s.yml
+
 - name: Create temporary directory
   ansible.builtin.file:
     path: "{{ temp_directory }}"
