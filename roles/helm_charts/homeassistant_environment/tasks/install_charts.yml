@@ -16,6 +16,7 @@
         ingress:
           subDomain: "{{ homeassistant_sub_domain }}"
           servicePort: "{{ homeassistant_service_port }}"
+          nodePort: "{{ homeassistant_service_node_port }}"
         volume:
           data:
             size: "{{ homeassistant_data_volume_size }}"
@@ -36,7 +37,9 @@
         ingress:
           subDomain: "{{ mosquitto_sub_domain }}"
           websocketPort: "{{ mosquitto_websocket_port }}"
+          websocketNodePort: "{{ mosquitto_websocket_node_port }}"
           tlsPort: "{{ mosquitto_tls_port }}"
+          tlsNodePort: "{{ mosquitto_tls_node_port }}"
         account:
           username: "{{ mosquitto_username }}"
           password: "{{ mosquitto_password }}"
@@ -58,6 +61,7 @@
         ingress:
           subDomain: "{{ zigbee2mqtt_sub_domain }}"
           servicePort: "{{ zigbee2mqtt_service_port }}"
+          nodePort: "{{ zigbee2mqtt_service_node_port }}"
         radio:
           vendorId: "{{ zigbee2mqtt_radio_vendor_id }}"
           productId: "{{ zigbee2mqtt_radio_product_id }}"
