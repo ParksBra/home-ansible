@@ -77,7 +77,7 @@
     release_values:
       network:
         ingress:
-          host: ".{{ homeassistant_network_domain }}"
+          host: "{{ homeassistant_network_domain }}"
         certmanager:
           clusterissuer:
             acme:
