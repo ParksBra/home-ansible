@@ -12,6 +12,11 @@
     namespace: akri
     create_namespace: true
     release_values:
+      onvif:
+        discovery:
+          enabled: true
+        configuration:
+          enabled: true
       udev:
         discovery:
           enabled: true
