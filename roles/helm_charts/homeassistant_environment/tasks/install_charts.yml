@@ -88,6 +88,7 @@
               email: "{{ homeassistant_network_acme_email }}"
             dns01:
               cloudflare:
+                email: "{{ cloudflare_email }}"
                 apiTokenSecretName: "{{ cloudflare_api_token_secret_name }}"
                 apiTokenSecretKey: "api-key"
       homeassistant:
