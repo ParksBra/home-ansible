@@ -1,0 +1,23 @@
+default_config:
+
+logger:
+    default: info
+
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+group: !include groups.yaml
+
+my:
+
+mobile_app:
+
+http:
+    server_port: {{ homeassistant_service_port }}
+    ip_ban_enabled: true
+    login_attempts_threshold: 10
+    use_x_forwarded_for: true
+    trusted_proxies:
+        - {{ k8s_service_cidr }}
+        - {{ k8s_pod_network_cidr }}
+        - 127.0.0.1/32

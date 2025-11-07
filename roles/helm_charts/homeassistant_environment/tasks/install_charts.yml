@@ -22,6 +22,8 @@
             size: "{{ homeassistant_data_volume_size }}"
           time:
             size: "{{ homeassistant_time_volume_size }}"
+        config:
+          configuration: "{{ lookup('template', 'templates/homeassistant/configuration.yaml.j2') }}"
     kubeconfig: "{{ k8s_kubectl_config_path }}"
     update_repo_cache: true
     state: present
