@@ -70,7 +70,7 @@
             size: "{{ zigbee2mqtt_data_volume_size }}"
         radio:
           akri:
-            enabled: true
+            enabled: false
             instance: "{{ akri_udev_instance_name }}"
     kubeconfig: "{{ k8s_kubectl_config_path }}"
     update_repo_cache: true
