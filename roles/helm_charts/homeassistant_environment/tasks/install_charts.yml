@@ -65,9 +65,6 @@
           subDomain: "{{ zigbee2mqtt_sub_domain }}"
           servicePort: "{{ zigbee2mqtt_service_port }}"
           nodePort: "{{ zigbee2mqtt_service_node_port }}"
-        radio:
-          vendorId: "{{ zigbee2mqtt_radio_vendor_id }}"
-          productId: "{{ zigbee2mqtt_radio_product_id }}"
         volume:
           data:
             size: "{{ zigbee2mqtt_data_volume_size }}"

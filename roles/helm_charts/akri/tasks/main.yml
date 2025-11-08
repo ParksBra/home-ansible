@@ -12,12 +12,12 @@
     namespace: akri
     create_namespace: true
     release_values:
-      onvif:
-        discovery:
-          enabled: true
+      udev:
         configuration:
           enabled: true
-      udev:
+          discoveryDetails:
+            groupRecursive: {{ akri_udev_discovery_group_recursive }}
+            udevRules: {{ akri_udev_discovery_rules_list }}
         discovery:
           enabled: true
       kubernetesDistro: k8s
