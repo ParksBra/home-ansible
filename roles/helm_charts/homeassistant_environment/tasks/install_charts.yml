@@ -106,7 +106,7 @@
           websocketPort: "{{ mosquitto_websocket_port }}"
           websocketNodePort: "{{ mosquitto_websocket_node_port }}"
           tlsPort: "{{ mosquitto_tls_port }}"
-          tlsNodePort: "{{ mosquitto_tls_node_port }}"
+          port: "{{ mosquitto_port }}"
       zigbee2mqtt:
         ingress:
           subDomain: "{{ zigbee2mqtt_sub_domain }}"
