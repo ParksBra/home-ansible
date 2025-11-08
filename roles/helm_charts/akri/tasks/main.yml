@@ -16,8 +16,8 @@
         configuration:
           enabled: true
           discoveryDetails:
-            groupRecursive: {{ akri_udev_discovery_group_recursive }}
-            udevRules: {{ akri_udev_discovery_rules_list }}
+            groupRecursive: "{{ akri_udev_discovery_group_recursive }}"
+            udevRules: "{{ akri_udev_discovery_rules_list }}"
         discovery:
           enabled: true
       kubernetesDistro: k8s
