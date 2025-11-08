@@ -15,6 +15,7 @@
       udev:
         configuration:
           enabled: true
+          name: "{{ akri_udev_instance_name }}"
           discoveryDetails:
             groupRecursive: "{{ akri_udev_discovery_group_recursive }}"
             udevRules: "{{ akri_udev_discovery_rules_list }}"

@@ -34,6 +34,7 @@ ingress_nginx_service_http_node_port: 30080
 ingress_nginx_service_https_node_port: 30443
 ingress_nginx_service_cluster_ip: "{{ k8s_service_cidr | ansible.utils.nthhost(-16) }}"
 
+akri_udev_instance_name: "zigbee2mqtt-radio"
 akri_udev_discovery_rules_list:
   - 'ATTRS{idVendor}=="{{ zigbee2mqtt_radio_vendor_id }}", ATTRS{idProduct}=="{{ zigbee2mqtt_radio_product_id }}"'
 akri_udev_discovery_group_recursive: true
