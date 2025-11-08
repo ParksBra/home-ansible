@@ -36,7 +36,7 @@ ingress_nginx_service_cluster_ip: "{{ k8s_service_cidr | ansible.utils.nthhost(-
 
 akri_udev_instance_name: "zigbee2mqtt-radio"
 akri_udev_discovery_rules_list:
-  - 'ATTRS{idVendor}=="{{ zigbee2mqtt_radio_vendor_id }}", ATTRS{idProduct}=="{{ zigbee2mqtt_radio_product_id }}"'
+  - \'ATTRS{idVendor}=="{{ zigbee2mqtt_radio_vendor_id }}", ATTRS{idProduct}=="{{ zigbee2mqtt_radio_product_id }}"\'
 akri_udev_discovery_group_recursive: true
 
 nginx_user: "nginx"
@@ -63,7 +63,7 @@ mosquitto_sub_domain: "mqtt.{{ homeassistant_sub_domain }}"
 mosquitto_websocket_port: 9001
 mosquitto_websocket_node_port: 30001
 mosquitto_tls_port: 8883
-mosquitto_tls_node_port: 30883
+mosquitto_port: 1883
 mosquitto_username: "admin"
 mosquitto_password_secret_name: "mosquitto-account-password"
 mosquitto_password: "{{ lookup('infisical.vault.read_secrets', secret_name=mosquitto_password_secret_name, path='/', project_id=infiscal_project_id, env_slug=infiscal_environment_slug, url=infiscal_url).value }}"
