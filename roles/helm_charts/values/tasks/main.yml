@@ -1,12 +1,12 @@
+- name: Clear existing requested template values files
+  ansible.builtin.file:
+    path: "{{ temp_directory }}/values_fragments"
+    state: absent
+
 - name: Create temporary directory for helm chart values fragments
   ansible.builtin.file:
     path: "{{ temp_directory }}/values_fragments"
     state: directory
-
-- name: Clear existing requested template values files
-  ansible.builtin.file:
-    path: "{{ temp_directory }}/values_fragments/*"
-    state: absent
 
 - name: Create requested template values values_files
   ansible.builtin.template:
