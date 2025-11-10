@@ -1,3 +1,10 @@
+- name: Create values file
+  ansible.builtin.include_role:
+    name: helm_charts/values
+  vars:
+    requested_values_templates:
+      - cert-manager
+
 - name: Install cert-manager via helm
   kubernetes.core.helm:
     name: cert-manager

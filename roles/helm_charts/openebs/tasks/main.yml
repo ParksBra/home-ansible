@@ -5,6 +5,13 @@
     kubeconfig: "{{ k8s_kubectl_config_path }}"
     force_update: true
 
+- name: Create values file
+  ansible.builtin.include_role:
+    name: helm_charts/values
+  vars:
+    requested_values_templates:
+      - openebs
+
 - name: Install openebs via helm
   kubernetes.core.helm:
     name: openebs

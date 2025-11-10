@@ -1,0 +1,7 @@
+controller:
+  service:
+    type: "{{ ingress_nginx_service_type }}"
+    nodePorts:
+      http: "{{ ingress_nginx_service_http_node_port }}"
+      https: "{{ ingress_nginx_service_https_node_port }}"
+    clusterIP: "{{ ingress_nginx_service_cluster_ip }}"

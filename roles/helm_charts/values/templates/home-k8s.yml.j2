@@ -1,37 +1,3 @@
-# akri
-udev:
-  configuration:
-    enabled: true
-    name: "{{ akri_udev_instance_name }}"
-    discoveryDetails:
-      groupRecursive: '{{ akri_udev_discovery_group_recursive | bool }}'
-      udevRules:
-{% for item in akri_udev_discovery_rules_list %}
-        - {{ item }}
-{% endfor %}
-  discovery:
-    enabled: true
-kubernetesDistro: k8s
-
-# openebs
-engines:
-  replicated:
-    mayastor:
-      enabled: false
-zfs-localpv:
-  zfsNode:
-    kubeletDir: /var/lib/kubelet
-
-# ingress_nginx
-controller:
-  service:
-    type: "{{ ingress_nginx_service_type }}"
-    nodePorts:
-      http: "{{ ingress_nginx_service_http_node_port }}"
-      https: "{{ ingress_nginx_service_https_node_port }}"
-    clusterIP: "{{ ingress_nginx_service_cluster_ip }}"
-
-# homeassistant_environment
 homeassistant:
   ingress:
     subDomain: "{{ homeassistant_sub_domain }}"
@@ -44,7 +10,7 @@ homeassistant:
       size: "{{ homeassistant_time_volume_size }}"
   config:
     configuration: |
-      {{ lookup('template', 'templates/homeassistant_configuration.yaml.j2') | indent(6) }}
+      {{ lookup('template', 'templates/sub_templates/homeassistant_configuration.yaml.j2') | indent(6) }}
 mosquitto:
   ingress:
     subDomain: "{{ mosquitto_sub_domain }}"
