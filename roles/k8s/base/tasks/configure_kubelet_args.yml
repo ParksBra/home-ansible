@@ -1,0 +1,19 @@
+- name: Configure Kubelet args
+  ansible.builtin.template:
+    src: "kubelet.j2"
+    dest: "/etc/default/kubelet"
+    owner: root
+    group: root
+    mode: 0644
+  when: k8s_kubelet_include_extra_args
+  notify: "restart_kubelet"
+
+- name: Remove Kubelet extra args file if not included
+  ansible.builtin.file:
+    path: "/etc/default/kubelet"
+    state: absent
+  when: not k8s_kubelet_include_extra_args
+  notify: "restart_kubelet"
+
+- name: Flush handlers to restart kubelet if needed
+  ansible.builtin.meta: flush_handlers

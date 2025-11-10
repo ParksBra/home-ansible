@@ -11,7 +11,7 @@
 - hosts: k8s_controller
   roles:
     - {role: k8s/controller, tags: ['k8s_controller']}
-    - {role: cni/calico/helm, tags: ['calico_cni']}
+    - {role: cni, tags: ['cni']}
   become: true
   become_user: root
 
