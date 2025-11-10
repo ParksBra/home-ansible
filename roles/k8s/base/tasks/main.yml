@@ -5,5 +5,4 @@
   ansible.builtin.include_tasks: install_k8s.yml
 
 - name: Configure kubelet service
-  ansible.builtin.template:
-    src: "kubelet_service.j2"
+  ansible.builtin.include_tasks: configure_kubelet.yml
