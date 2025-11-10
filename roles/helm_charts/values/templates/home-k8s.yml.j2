@@ -3,6 +3,8 @@ homeassistant:
     subDomain: "{{ homeassistant_sub_domain }}"
     servicePort: "{{ homeassistant_service_port }}"
     nodePort: "{{ homeassistant_service_node_port }}"
+  storage:
+    reclaimPolicy: "Retain"
   volume:
     data:
       size: "{{ homeassistant_data_volume_size }}"
@@ -21,6 +23,8 @@ mosquitto:
   account:
     username: "{{ mosquitto_username }}"
     password: "{{ mosquitto_password }}"
+  storage:
+    reclaimPolicy: "Retain"
   volume:
     data:
       size: "{{ mosquitto_data_volume_size }}"
@@ -29,6 +33,8 @@ zigbee2mqtt:
     subDomain: "{{ zigbee2mqtt_sub_domain }}"
     servicePort: "{{ zigbee2mqtt_service_port }}"
     nodePort: "{{ zigbee2mqtt_service_node_port }}"
+  storage:
+    reclaimPolicy: "Retain"
   volume:
     data:
       size: "{{ zigbee2mqtt_data_volume_size }}"

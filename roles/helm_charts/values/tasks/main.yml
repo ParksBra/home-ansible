@@ -13,6 +13,7 @@
     src: "templates/{{ item }}.yml.j2"
     dest: "{{ temp_directory }}/values_fragments/{{ item }}.yml"
   loop: "{{ requested_values_templates }}"
+  notify: helm_cleanup_values_fragments
 
 - name: Clear existing assembled values files
   ansible.builtin.file:
