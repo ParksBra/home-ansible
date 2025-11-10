@@ -4,8 +4,11 @@ udev:
     enabled: true
     name: "{{ akri_udev_instance_name }}"
     discoveryDetails:
-      groupRecursive: "{{ akri_udev_discovery_group_recursive }}"
-      udevRules: "{{ akri_udev_discovery_rules_list }}"
+      groupRecursive: '{{ akri_udev_discovery_group_recursive | bool }}'
+      udevRules:
+{% for item in akri_udev_discovery_rules_list %}
+        - {{ item }}
+{% endfor %}
   discovery:
     enabled: true
 kubernetesDistro: k8s
