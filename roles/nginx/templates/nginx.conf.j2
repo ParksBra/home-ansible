@@ -20,7 +20,7 @@ http {
 
 stream {
     upstream external_https {
-        server 127.0.0.1:{{ ingress_nginx_service_https_node_port }} max_fails=3 fail_timeout=10s;
+        server {{ nginx_upstream_service }}:{{ ingress_nginx_service_https_node_port }} max_fails=3 fail_timeout=10s;
     }
 
     log_format basic '$remote_addr [$time_local] '
@@ -40,7 +40,7 @@ stream {
 
 stream {
     upstream internal_http {
-        server 127.0.0.1:{{ ingress_nginx_service_http_node_port }} max_fails=3 fail_timeout=10s;
+        server {{ nginx_upstream_service }}:{{ ingress_nginx_service_http_node_port }} max_fails=3 fail_timeout=10s;
     }
 
     log_format basic '$remote_addr [$time_local] '
