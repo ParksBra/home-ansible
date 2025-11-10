@@ -11,14 +11,8 @@
     chart_ref: openebs/openebs
     namespace: openebs
     create_namespace: true
-    release_values:
-      engines:
-        replicated:
-          mayastor:
-            enabled: false
-      zfs-localpv:
-        zfsNode:
-          kubeletDir: /var/lib/kubelet
     kubeconfig: "{{ k8s_kubectl_config_path }}"
+    values_files:
+      - "{{ helm_values_temp_file }}"
     update_repo_cache: true
     state: present

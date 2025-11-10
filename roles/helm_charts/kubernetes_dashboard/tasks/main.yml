@@ -12,5 +12,7 @@
     namespace: kubernetes-dashboard
     create_namespace: true
     kubeconfig: "{{ k8s_kubectl_config_path }}"
+    values_files:
+      - "{{ helm_values_temp_file }}"
     update_repo_cache: true
     state: present

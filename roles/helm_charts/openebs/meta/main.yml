@@ -1,3 +1,4 @@
 dependencies:
   - role: zfs/base
   - role: helm
+  - role: helm_charts/values

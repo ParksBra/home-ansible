@@ -11,21 +11,9 @@
     chart_ref: home-k8s/homeassistant
     namespace: "{{ homeassistant_namespace }}"
     create_namespace: true
-    release_values:
-      homeassistant:
-        ingress:
-          subDomain: "{{ homeassistant_sub_domain }}"
-          servicePort: "{{ homeassistant_service_port }}"
-          nodePort: "{{ homeassistant_service_node_port }}"
-        volume:
-          data:
-            size: "{{ homeassistant_data_volume_size }}"
-          time:
-            size: "{{ homeassistant_time_volume_size }}"
-        config:
-          configuration: |
-            {{ lookup('template', 'templates/homeassistant_configuration.yaml.j2') | indent(4) }}
     kubeconfig: "{{ k8s_kubectl_config_path }}"
+    values_files:
+      - "{{ helm_values_temp_file }}"
     update_repo_cache: true
     state: present
 
