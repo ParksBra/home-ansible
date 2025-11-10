@@ -11,45 +11,52 @@ http {
     default_type application/octet-stream;
     sendfile on;
     keepalive_timeout 65;
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                        '$status $body_bytes_sent "$http_referer" '
+                        '"$http_user_agent" "$http_x_forwarded_for"';
+
+    access_log  /var/log/nginx/access.log  main;
+}
+
+stream {
+    upstream external_https {
+        server 127.0.0.1:{{ ingress_nginx_service_https_node_port }} max_fails=3 fail_timeout=10s;
+    }
+
+    log_format basic '$remote_addr [$time_local] '
+                    '$protocol $status $bytes_sent $bytes_received '
+                    '$session_time "$upstream_addr" '
+                    '"$upstream_bytes_sent" "$upstream_bytes_received" "$upstream_connect_time"';
+
+    access_log /var/log/nginx/external_https_access.log basic;
+    error_log  /var/log/nginx/external_https_error.log;
 
     server {
-        listen {{ nginx_external_port }} ssl;
-        listen [::]:{{ nginx_external_port }} ssl;
-        server_name *.{{ nginx_external_network_server_name }};
-        client_max_body_size 0;
-        location / {
-            set $upstream_service {{ nginx_upstream_service }};
-            set $upstream_port {{ nginx_upstream_port }};
-            set $upstream_proto {{ nginx_upstream_proto }};
-            proxy_pass $upstream_proto://$upstream_service:$upstream_port;
-        }
-    }
-    server {
-        listen {{ nginx_internal_port }} default_server;
-        listen [::]:{{ nginx_internal_port }};
-        server_name *.{{ nginx_internal_network_server_name }};
-        {% for cidr in nginx_internal_network_allowed_cidrs %}allow {{ cidr }};
-        {% endfor %}
-        deny all;
-        client_max_body_size 0;
-        location / {
-            set $upstream_service {{ nginx_upstream_service }};
-            set $upstream_port {{ nginx_upstream_port }};
-            set $upstream_proto {{ nginx_upstream_proto }};
-            proxy_pass $upstream_proto://$upstream_service:$upstream_port;
-        }
+        listen 443;
+        proxy_pass external_https;
+        proxy_next_upstream on;
     }
 }
 
+stream {
+    upstream internal_http {
+        server 127.0.0.1:{{ ingress_nginx_service_http_node_port }} max_fails=3 fail_timeout=10s;
+    }
 
+    log_format basic '$remote_addr [$time_local] '
+                    '$protocol $status $bytes_sent $bytes_received '
+                    '$session_time "$upstream_addr" '
+                    '"$upstream_bytes_sent" "$upstream_bytes_received" "$upstream_connect_time"';
 
+    access_log /var/log/nginx/internal_http_access.log basic;
+    error_log  /var/log/nginx/internal_http_error.log;
 
-
-
-
-
-
-
-
-
-
+    server {
+        {% for cidr in nginx_internal_network_allowed_cidrs %}allow {{ cidr }};
+        {% endfor %}
+        deny all;
+        listen 80;
+        proxy_pass internal_http;
+        proxy_next_upstream on;
+    }
+}
