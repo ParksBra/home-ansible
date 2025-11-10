@@ -12,7 +12,7 @@
   ansible.builtin.template:
     src: "templates/{{ item }}.yml.j2"
     dest: "{{ temp_directory }}/values_fragments/{{ item }}.yml"
-  loop: requested_values_templates
+  loop: "{{ requested_values_templates }}"
 
 - name: Assemble fragments
   ansible.builtin.assemble:
