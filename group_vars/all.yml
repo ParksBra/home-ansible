@@ -27,7 +27,7 @@ k8s_discovery_token_secret_name: "k8s-discovery-token"
 k8s_discovery_token: "{{ lookup('infisical.vault.read_secrets', secret_name=k8s_discovery_token_secret_name, path='/', project_id=infiscal_project_id, env_slug=infiscal_environment_slug, url=infiscal_url).value }}"
 k8s_force_reset: "{{ lookup('env', 'K8S_FORCE_RESET') | default(false) | bool }}"
 k8s_kubelet_resolve_conf_path: "" # Leave empty to avoid inheriting hosts /etc/resolv.conf
-k8s_kubelet_extra_args: "--resolve-conf={{ k8s_resolve_conf_path }}" # Additional args to pass to kubelet service
+k8s_kubelet_extra_args: "--resolve-conf={{ k8s_kubelet_resolve_conf_path }}" # Additional args to pass to kubelet service
 k8s_kubelet_include_extra_args: true # Whether to include extra args file for kubelet
 
 openebs_zfs_pool_name: "zfspv-pool"
