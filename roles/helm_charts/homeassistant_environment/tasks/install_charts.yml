@@ -41,8 +41,8 @@
           subDomain: "{{ mosquitto_sub_domain }}"
           websocketPort: "{{ mosquitto_websocket_port }}"
           websocketNodePort: "{{ mosquitto_websocket_node_port }}"
-          tlsPort: "{{ mosquitto_tls_port }}"
-          port: "{{ mosquitto_port }}"
+          mqttsPort: "{{ mosquitto_mqtts_port }}"
+          mqttPort: "{{ mosquitto_mqtt_port }}"
         account:
           username: "{{ mosquitto_username }}"
           password: "{{ mosquitto_password }}"
