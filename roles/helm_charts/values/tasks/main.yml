@@ -1,9 +1,3 @@
-- name: Create temporary values file for helm chart
-  ansible.builtin.template:
-    src: "templates/values.yml.j2"
-    dest: "{{ helm_values_temp_file }}"
-  register: helm_cleanup_values_file
-
 - name: Create temporary directory for helm chart values fragments
   ansible.builtin.file:
     path: "{{ temp_directory }}/values_fragments"
