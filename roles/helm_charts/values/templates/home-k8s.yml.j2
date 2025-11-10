@@ -10,7 +10,7 @@ homeassistant:
       size: "{{ homeassistant_time_volume_size }}"
   config:
     configuration: |
-      {{ lookup('template', 'templates/sub_templates/homeassistant_configuration.yaml.j2') | indent(6) }}
+      {{ lookup('template', 'templates/sub_templates/homeassistant_configuration.yml.j2') | indent(6) }}
 mosquitto:
   ingress:
     subDomain: "{{ mosquitto_sub_domain }}"
