@@ -1,0 +1,8 @@
+- name: Install docker repo
+  ansible.builtin.include_tasks: install_docker_repo.yml
+
+- name: Install docker
+  ansible.builtin.include_tasks: install_docker.yml
+
+- name: Configure docker services
+  ansible.builtin.include_tasks: configure_docker_services.yml
