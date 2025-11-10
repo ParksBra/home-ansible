@@ -14,6 +14,11 @@
     dest: "{{ temp_directory }}/values_fragments/{{ item }}.yml"
   loop: "{{ requested_values_templates }}"
 
+- name: Clear existing assembled values files
+  ansible.builtin.file:
+    path: "{{ helm_values_temp_file }}"
+    state: absent
+
 - name: Assemble fragments
   ansible.builtin.assemble:
     src: "{{ temp_directory }}/values_fragments/"
