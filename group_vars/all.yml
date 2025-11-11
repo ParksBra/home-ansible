@@ -71,7 +71,8 @@ mosquitto_mqtts_port: 8883
 mosquitto_mqtt_port: 1883
 mosquitto_username: "admin"
 mosquitto_password_secret_name: "mosquitto-account-password"
-mosquitto_password: "{{ lookup('infisical.vault.read_secrets', secret_name=mosquitto_password_secret_name, path='/', project_id=infiscal_project_id, env_slug=infiscal_environment_slug, url=infiscal_url).value }}"
+mosquitto_password_hash_algorithm: "sha512"
+mosquitto_password: "{{ lookup('infisical.vault.read_secrets', secret_name=mosquitto_password_secret_name, path='/', project_id=infiscal_project_id, env_slug=infiscal_environment_slug, url=infiscal_url).value | hash(mosquitto_password_hash_algorithm) }}"
 mosquitto_data_volume_size: "8Gi"
 
 zigbee2mqtt_service_port: 8080
