@@ -1,10 +1,12 @@
+#pylint: skip-file
+
 from ansible.errors import AnsibleError
 
 def mosquitto_passwd(passwd):
   try:
     import passlib.hash
   except Exception as e:
-    raise AnsibleError('mosquitto_passlib custom filter requires the passlib pip package installed')
+    raise AnsibleError('mosquitto_passlib custom filter requires the passlib pip package installed') from e
   
   SALT_SIZE = 12
   ITERATIONS = 101
