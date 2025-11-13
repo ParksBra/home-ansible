@@ -1,8 +1,3 @@
-- name: Ensure repo install prerequisites are present
-  ansible.builtin.include_role:
-    name: common
-    tasks_from: install_repo_packages.yml
-
 - name: Get docker release signing key
   ansible.builtin.shell: 'curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --yes --dearmor -o /etc/apt/keyrings/docker-apt-keyring.gpg'
   become: true
