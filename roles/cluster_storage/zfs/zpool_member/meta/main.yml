@@ -1,2 +1,2 @@
 dependencies:
-  - role: zfs/base
+  - role: cluster_storage/zfs/base
