@@ -106,6 +106,7 @@ pipeline {
                             {
                                 def validation_failure_input = input(message: "Would you like to still proceed?")
                                 if (validation_failure_input != 'Proceed') {
+                                    echo "${validation_failure_input}"
                                     error("Build aborted due to validation failure.")
                                 } else {
                                     unstable("Proceeding despite validation failure on main branch.")
