@@ -54,7 +54,7 @@ pipeline {
         )
         credentials(
             name: 'WORKER_SSH_KEY',
-            credentialType: 'SSH Username with private key',
+            credentialType: 'com.cloudbees.jenkins.plugins.sshcredentials.impl.BasicSSHUserPrivateKey',
             description: 'SSH key for accessing the worker hosts'
         )
         string(
@@ -72,7 +72,7 @@ pipeline {
         )
         credentials(
             name: 'INFISICAL_IDENTITY',
-            credentialType: 'Username with password',
+            credentialType: 'com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl',
             description: 'Infisical service identity for universal authentication'
         )
     }
