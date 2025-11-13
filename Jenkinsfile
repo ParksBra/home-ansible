@@ -101,7 +101,7 @@ pipeline {
                             sh "${WORKSPACE}/.venv/bin/ansible-lint ${WORKSPACE}/playbooks/*.yml"
                         } catch (err) {
                         echo "Ansible linting validation failed: ${err}"
-                        if (true) {
+                        if (env.BRANCH_NAME == 'main') {
                             timeout(time: 5, unit: 'MINUTES') {
                                 input(id: 'validation_failure_input', message: 'Would you like to still proceed?')
                                 unstable("Proceeding despite validation failure on main branch.")
