@@ -1,6 +1,9 @@
-def setup_env_vars(ssh_user, ssh_key_path, infisical_identity_client_id, infisical_identity_secret) {
-    env.SSH_USER = ssh_user
-    env.SSH_KEY_PATH = ssh_key_path
+def setup_env_vars(controller_ssh_user, controller_ssh_key_path, worker_ssh_user, worker_ssh_key_path, infisical_identity_client_id, infisical_identity_secret) {
+    env.CONTROLLER_SSH_USER = controller_ssh_user
+    env.CONTROLLER_SSH_KEY_PATH = controller_ssh_key_path
+    
+    env.WORKER_SSH_USER = worker_ssh_user
+    env.WORKER_SSH_KEY_PATH = worker_ssh_key_path
 
     env.DEBUG = params.DEBUG
 
@@ -29,10 +32,10 @@ pipeline {
             defaultValue: false,
             description: 'Enable debug logging and display of secrets'
         )
-        booleanParam(
-            name: 'RESET_PYTHON_VENV',
-            defaultValue: false,
-            description: 'Force reset of the Python virtual environment'
+        string(
+            name: 'PYTHON_MASTER_ENVIRONMENT',
+            defaultValue: '/opt/master-venv/bin/python3',
+            description: 'Path to the Python interpreter for setting up the virtual environment. Used to save time for large libraries.'
         )
         booleanParam(
             name: 'SKIP_VALIDATION',
@@ -75,20 +78,11 @@ pipeline {
     }
 
     stages {
-        stage('reset-python-venv') {
-            when {
-                expression { return params.RESET_PYTHON_VENV.toBoolean() }
-            }
-            steps {
-                echo 'Resetting Python virtual environment...'
-                sh "rm -rf ${WORKSPACE}/.venv"
-            }
-        }
         stage('setup-environment') {
             steps {
                 echo 'Preparing environment...'
                 script {
-                    sh "python3 -m venv ${WORKSPACE}/.venv"
+                    sh "${params.PYTHON_MASTER_ENVIRONMENT} -m venv ${WORKSPACE}/.venv"
                     sh "${WORKSPACE}/.venv/bin/pip install --no-cache-dir --upgrade pip"
                     sh "${WORKSPACE}/.venv/bin/pip install --no-cache-dir -r requirements.txt"
                     sh "${WORKSPACE}/.venv/bin/ansible-galaxy install -r ${WORKSPACE}/roles/requirements.yml"
@@ -124,24 +118,24 @@ pipeline {
                 }
             }
         }
-        stage('make-k8s-controller') {
+        stage('make-k8s-cluster') {
             steps {
-                withCredentials([sshUserPrivateKey(credentialsId: params.CONTROLLER_SSH_KEY, usernameVariable: 'ssh_user', keyFileVariable: 'ssh_key_path'), usernamePassword(credentialsId: params.INFISICAL_IDENTITY, usernameVariable: 'infisical_identity_client_id', passwordVariable: 'infisical_identity_secret')]) {
-                    echo 'Running make_server Ansible playbook on controller...'
-                    setup_env_vars(ssh_user, ssh_key_path, infisical_identity_client_id, infisical_identity_secret)
+                withCredentials([sshUserPrivateKey(credentialsId: params.CONTROLLER_SSH_KEY, usernameVariable: 'controller_ssh_user', keyFileVariable: 'controller_ssh_key_path'), sshUserPrivateKey(credentialsId: params.WORKER_SSH_KEY, usernameVariable: 'worker_ssh_user', keyFileVariable: 'worker_ssh_key_path'), usernamePassword(credentialsId: params.INFISICAL_IDENTITY, usernameVariable: 'infisical_identity_client_id', passwordVariable: 'infisical_identity_secret')]) {
+                    echo 'Running make_cluster Ansible playbook...'
+                    setup_env_vars(controller_ssh_user, controller_ssh_key_path, worker_ssh_user, worker_ssh_key_path, infisical_identity_client_id, infisical_identity_secret)
                     script {
-                        sh "${WORKSPACE}/.venv/bin/ansible-playbook '${WORKSPACE}/playbooks/make_controller.yml' -l 'k8s_controller' ${ansible_opts}"
+                        sh "${WORKSPACE}/.venv/bin/ansible-playbook '${WORKSPACE}/playbooks/make_cluster.yml' ${ansible_opts}"
                     }
                 }
             }
         }
-        stage('make-k8s-workers') {
+        stage('make-cluster-storage') {
             steps {
-                withCredentials([sshUserPrivateKey(credentialsId: params.WORKER_SSH_KEY, usernameVariable: 'ssh_user', keyFileVariable: 'ssh_key_path'), usernamePassword(credentialsId: params.INFISICAL_IDENTITY, usernameVariable: 'infisical_identity_client_id', passwordVariable: 'infisical_identity_secret')]) {
-                    echo 'Running make_server Ansible playbook on workers...'
-                    setup_env_vars(ssh_user, ssh_key_path, infisical_identity_client_id, infisical_identity_secret)
+                withCredentials([sshUserPrivateKey(credentialsId: params.CONTROLLER_SSH_KEY, usernameVariable: 'controller_ssh_user', keyFileVariable: 'controller_ssh_key_path'), sshUserPrivateKey(credentialsId: params.WORKER_SSH_KEY, usernameVariable: 'worker_ssh_user', keyFileVariable: 'worker_ssh_key_path'), usernamePassword(credentialsId: params.INFISICAL_IDENTITY, usernameVariable: 'infisical_identity_client_id', passwordVariable: 'infisical_identity_secret')]) {
+                    echo 'Running setup_addons Ansible playbook on workers...'
+                    setup_env_vars(controller_ssh_user, controller_ssh_key_path, worker_ssh_user, worker_ssh_key_path, infisical_identity_client_id, infisical_identity_secret)
                     script {
-                        sh "${WORKSPACE}/.venv/bin/ansible-playbook '${WORKSPACE}/playbooks/make_worker.yml' -l 'k8s_worker' ${ansible_opts}"
+                        sh "${WORKSPACE}/.venv/bin/ansible-playbook '${WORKSPACE}/playbooks/make_cluster_storage.yml' ${ansible_opts}"
                     }
                 }
             }

@@ -1,4 +1,4 @@
-ansible_ssh_private_key_file: "{{ lookup('env', 'SSH_KEY_PATH') }}"
-ansible_ssh_user: "{{ lookup('env', 'SSH_USER') | default('controller', true) }}"
+ansible_ssh_private_key_file: "{{ lookup('env', 'CONTROLLER_SSH_KEY_PATH') }}"
+ansible_ssh_user: "{{ lookup('env', 'CONTROLLER_SSH_USER') | default('controller', true) }}"
 service_user: "{{ ansible_ssh_user }}"
 service_group: "{{ ansible_ssh_user }}"

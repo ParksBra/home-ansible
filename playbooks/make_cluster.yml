@@ -1,0 +1,23 @@
+---
+- hosts: all
+  roles:
+    - {role: common, tags: ['common']}
+    - {role: k8s/rpi5_prepare, tags: ['k8s_rpi5_prepare']}
+    - {role: docker, tags: ['docker']}
+    - {role: k8s/base, tags: ['k8s_base']}
+  become: true
+  become_user: root
+
+- hosts: k8s_controller
+  roles:
+    - {role: k8s/controller, tags: ['k8s_controller']}
+    - {role: helm, tags: ['helm']}
+    - {role: cni, tags: ['cni']}
+  become: true
+  become_user: root
+
+- hosts: k8s_worker
+  roles:
+    - {role: k8s/worker, tags: ['k8s_worker']}
+  become: true
+  become_user: root

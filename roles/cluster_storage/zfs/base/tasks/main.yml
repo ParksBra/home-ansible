@@ -1,0 +1,6 @@
+- name: Install zfsutils
+  ansible.builtin.apt:
+    name: zfsutils-linux
+    state: present
+    update_cache: true
+  become: true

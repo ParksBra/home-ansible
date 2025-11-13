@@ -1,0 +1,19 @@
+- name: Reset k8s
+  block:
+  - name: Reset k8s
+    ansible.builtin.include_role:
+      name: k8s/reset
+
+  - name: Reset worker hosts if controller reset
+    ansible.builtin.include_tasks: k8s_worker_reset_loop.yml
+    loop: "{{ groups['k8s_worker'] }}"
+
+  - name: Set reset success
+    ansible.builtin.set_fact:
+      reset_success: true
+      cacheable: true
+  rescue:
+    - name: Set reset failure
+      ansible.builtin.set_fact:
+        reset_success: false
+        cacheable: true

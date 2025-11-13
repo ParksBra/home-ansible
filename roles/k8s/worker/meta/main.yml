@@ -1,2 +1,0 @@
-dependencies:
-  - role: k8s/reset

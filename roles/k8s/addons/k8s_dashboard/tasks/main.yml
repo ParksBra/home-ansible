@@ -1,2 +1,0 @@
-- name: Install kubernetes dashboard
-  ansible.builtin.include_tasks: install_k8s_dashboard.yml

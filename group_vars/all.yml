@@ -1,10 +1,17 @@
 debug: "{{ lookup('env', 'DEBUG') | default(false) | bool }}"
 
+ansible_python_interpreter: "/usr/bin/python3.13"
+
 temp_directory: "/tmp/ansible_home"
+
+helm_values_temp_file: "{{ temp_directory }}/helm_values.yml"
 
 infiscal_url: "{{ lookup('env', 'INFISCAL_URL') }}"
 infiscal_project_id: "{{ lookup('env', 'INFISCAL_PROJECT_ID') }}"
 infiscal_environment_slug: "{{ lookup('env', 'INFISCAL_ENVIRONMENT_SLUG') }}"
+
+openebs_zfs_pool_name: "zfspv-pool"
+openebs_zfs_pool_device: "/dev/sda1"
 
 k8s_version: "1.34.1"
 k8s_major_version: "{{ k8s_version.split('.')[0] }}.{{ k8s_version.split('.')[1] }}"
@@ -12,8 +19,9 @@ k8s_service_cidr: "10.96.0.0/12"
 k8s_pod_network_cidr: "10.244.0.0/16"
 k8s_container_runtime: "containerd"
 k8s_container_runtime_socket: "/var/run/containerd/containerd.sock"
-k8s_cni_calico_version: "3.31.0"
-k8s_cni_manifest_directory: "/etc/kubernetes/network"
+k8s_cni: "calico" # Options: calico, TODO: add more later
+k8s_cni_installation_method: "helm" # Options: helm, kubectl
+k8s_cni_version: "3.31.0"
 k8s_kubectl_config_dir: "/home/{{ ansible_ssh_user }}/.kube"
 k8s_kubectl_config_path: "{{ k8s_kubectl_config_dir }}/config"
 k8s_apiserver_ip: "{{ hostvars[groups['k8s_controller'][0]]['ansible_default_ipv4'].address | default(lookup('community.general.dig', groups['k8s_controller'][0] ~ '.local.', fail_on_error=true))}}"
@@ -23,3 +31,5 @@ k8s_init_opts: ""
 k8s_discovery_token_secret_name: "k8s-discovery-token"
 k8s_discovery_token: "{{ lookup('infisical.vault.read_secrets', secret_name=k8s_discovery_token_secret_name, path='/', project_id=infiscal_project_id, env_slug=infiscal_environment_slug, url=infiscal_url).value }}"
 k8s_force_reset: "{{ lookup('env', 'K8S_FORCE_RESET') | default(false) | bool }}"
+k8s_kubelet_extra_args: "" # Additional args to pass to kubelet service
+k8s_kubelet_include_extra_args: false # Whether to include extra args file for kubelet

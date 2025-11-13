@@ -1,0 +1,2 @@
+- name: Install CNI via specified method
+  ansible.builtin.include_tasks: "{{ k8s_cni }}/{{ k8s_cni_installation_method }}/tasks/main.yml"

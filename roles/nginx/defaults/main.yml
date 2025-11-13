@@ -1,0 +1,11 @@
+nginx_user: "nginx"
+nginx_worker_processes: 1
+nginx_worker_connections: 1024
+nginx_external_port: 443
+nginx_external_network_server_name: "example.com"
+nginx_internal_port: 80
+nginx_internal_network_server_name: "example.com"
+nginx_internal_network_allowed_cidrs: ["192.168.1.0/24"]
+nginx_upstream_service: "127.0.0.1"
+nginx_upstream_port: 80
+nginx_upstream_proto: "http"

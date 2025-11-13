@@ -3,3 +3,6 @@
 
 - name: Install kubernetes packages
   ansible.builtin.include_tasks: install_k8s.yml
+
+- name: Configure kubelet service
+  ansible.builtin.include_tasks: configure_kubelet.yml

@@ -1,2 +1,4 @@
 dependencies:
   - role: common
+  - role: k8s/rpi5_prepare
+  - role: docker
