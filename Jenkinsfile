@@ -102,15 +102,9 @@ pipeline {
                         } catch (err) {
                         echo "Ansible linting validation failed: ${err}"
                         if (true) {
-                            timeout(time: 5, unit: 'MINUTES')
-                            {
-                                def validation_failure_input = input(id: 'validation_failure_input', message: 'Would you like to still proceed?')
-                                echo "Input is ${validation_failure_input}"
-                                if (validation_failure_input != 'Proceed') {
-                                    error("Build aborted due to validation failure.")
-                                } else {
-                                    unstable("Proceeding despite validation failure on main branch.")
-                                }
+                            timeout(time: 5, unit: 'MINUTES') {
+                                input(id: 'validation_failure_input', message: 'Would you like to still proceed?')
+                                unstable("Proceeding despite validation failure on main branch.")
                             }
                         } else {
                             unstable("Allowing to proceed on non-main branch.")
