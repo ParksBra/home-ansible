@@ -104,7 +104,7 @@ pipeline {
                         if (true) {
                             timeout(time: 5, unit: 'MINUTES')
                             {
-                                def validation_failure_input = input(message: "Would you like to still proceed?")
+                                def validation_failure_input = input(id: 'validation_failure_input', message: 'Would you like to still proceed?')
                                 if (validation_failure_input != 'Proceed') {
                                     echo "${validation_failure_input}"
                                     error("Build aborted due to validation failure.")
