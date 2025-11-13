@@ -49,7 +49,7 @@ pipeline {
         )
         credentials(
             name: 'CONTROLLER_SSH_KEY',
-            credentialType: 'SSH Username with private key',
+            credentialType: 'com.cloudbees.plugins.credentials.impl.SSHUserPrivateKey',
             description: 'SSH key for accessing the controller hosts'
         )
         credentials(
