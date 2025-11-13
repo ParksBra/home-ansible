@@ -37,6 +37,11 @@ pipeline {
             defaultValue: false,
             description: 'Force reset of the Python virtual environment'
         )
+        string(
+            name: 'PYTHON_MASTER_ENVIRONMENT',
+            defaultValue: '/opt/master-venv/bin/python3',
+            description: 'Path to the Python interpreter for setting up the virtual environment. Used to save time for large libraries.'
+        )
         booleanParam(
             name: 'SKIP_VALIDATION',
             defaultValue: false,
@@ -91,7 +96,7 @@ pipeline {
             steps {
                 echo 'Preparing environment...'
                 script {
-                    sh "python3 -m venv ${WORKSPACE}/.venv"
+                    sh "${params.PYTHON_MASTER_ENVIRONMENT} -m venv ${WORKSPACE}/.venv"
                     sh "${WORKSPACE}/.venv/bin/pip install --no-cache-dir --upgrade pip"
                     sh "${WORKSPACE}/.venv/bin/pip install --no-cache-dir -r requirements.txt"
                     sh "${WORKSPACE}/.venv/bin/ansible-galaxy install -r ${WORKSPACE}/roles/requirements.yml"
