@@ -1,5 +1,5 @@
 #pylint: skip-file
-
+# Credit: https://shantanoo-desai.github.io/posts/technology/mosquitto_ansible_passgen
 from ansible.errors import AnsibleError
 
 def mosquitto_passwd(passwd):
