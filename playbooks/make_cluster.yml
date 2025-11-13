@@ -11,6 +11,7 @@
 - hosts: k8s_controller
   roles:
     - {role: k8s/controller, tags: ['k8s_controller']}
+    - {role: helm, tags: ['helm']}
     - {role: cni, tags: ['cni']}
   become: true
   become_user: root

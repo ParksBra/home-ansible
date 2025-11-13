@@ -1,3 +1,0 @@
-dependencies:
-  - role: zfs/base
-  - role: helm

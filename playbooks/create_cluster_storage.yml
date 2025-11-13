@@ -1,0 +1,12 @@
+---
+- hosts: k8s_worker
+  roles:
+    - {role: cluster_storage/zfs/zpool_member, tags: ['zfs']}
+  become: true
+  become_user: root
+
+- hosts: k8s_controller
+  roles:
+    - {role: cluster_storage/openebs, tags: ['openebs']}
+  become: true
+  become_user: root

@@ -4,6 +4,8 @@ ansible_python_interpreter: "/usr/bin/python3.13"
 
 temp_directory: "/tmp/ansible_home"
 
+helm_values_temp_file: "{{ temp_directory }}/helm_values.yml"
+
 infiscal_url: "{{ lookup('env', 'INFISCAL_URL') }}"
 infiscal_project_id: "{{ lookup('env', 'INFISCAL_PROJECT_ID') }}"
 infiscal_environment_slug: "{{ lookup('env', 'INFISCAL_ENVIRONMENT_SLUG') }}"
@@ -28,64 +30,3 @@ k8s_discovery_token: "{{ lookup('infisical.vault.read_secrets', secret_name=k8s_
 k8s_force_reset: "{{ lookup('env', 'K8S_FORCE_RESET') | default(false) | bool }}"
 k8s_kubelet_extra_args: "" # Additional args to pass to kubelet service
 k8s_kubelet_include_extra_args: false # Whether to include extra args file for kubelet
-
-helm_values_temp_file: "{{ temp_directory }}/helm_values.yml"
-
-openebs_zfs_pool_name: "zfspv-pool"
-openebs_zfs_pool_device: "/dev/sda1"
-
-ingress_nginx_service_type: "NodePort"
-ingress_nginx_service_http_node_port: 30080
-ingress_nginx_service_https_node_port: 30443
-ingress_nginx_service_cluster_ip: "{{ k8s_service_cidr | ansible.utils.nthhost(-16) }}"
-
-akri_udev_instance_name: "zigbee2mqtt-radio"
-akri_udev_discovery_rules_list:
-  - 'ATTRS{idVendor}=="{{ zigbee2mqtt_radio_vendor_id }}", ATTRS{idProduct}=="{{ zigbee2mqtt_radio_product_id }}"'
-akri_udev_discovery_group_recursive: true
-
-nginx_user: "nginx"
-nginx_group: "nginx"
-nginx_worker_processes: "{{ ansible_processor_vcpus | default(1) }}"
-nginx_worker_connections: 1024
-nginx_external_port: 443
-nginx_external_network_server_name: "parkl.ee"
-nginx_internal_port: 80
-nginx_internal_network_server_name: "{{ ansible_default_ipv4 }}"
-nginx_internal_network_allowed_cidrs: ["192.168.1.0/24"]
-nginx_upstream_service: "{{ ingress_nginx_service_cluster_ip }}"
-nginx_upstream_port: "{{ ingress_nginx_service_http_node_port }}"
-nginx_upstream_proto: "http"
-
-homeassistant_namespace: "homeassistant"
-homeassistant_sub_domain: "home"
-homeassistant_service_port: 8123
-homeassistant_service_node_port: 30123
-homeassistant_data_volume_size: "64Gi"
-homeassistant_time_volume_size: "8Gi"
-
-mosquitto_sub_domain: "mqtt.{{ homeassistant_sub_domain }}"
-mosquitto_websocket_port: 9001
-mosquitto_websocket_node_port: 30001
-mosquitto_mqtts_port: 8883
-mosquitto_mqtt_port: 1883
-mosquitto_username: "admin"
-mosquitto_password_secret_name: "mosquitto-account-password"
-mosquitto_password: "{{ lookup('infisical.vault.read_secrets', secret_name=mosquitto_password_secret_name, path='/', project_id=infiscal_project_id, env_slug=infiscal_environment_slug, url=infiscal_url).value | mosquitto_passwd }}"
-mosquitto_data_volume_size: "8Gi"
-
-zigbee2mqtt_service_port: 8080
-zigbee2mqtt_service_node_port: 30234
-zigbee2mqtt_sub_domain: "z2m.{{ homeassistant_sub_domain }}"
-zigbee2mqtt_radio_vendor_id: "10c4"
-zigbee2mqtt_radio_product_id: "ea60"
-zigbee2mqtt_data_volume_size: "16Gi"
-
-homeassistant_network_domain: "{{ nginx_external_network_server_name }}"
-homeassistant_network_acme_email_secret_name: "homeassistant-acme-email"
-homeassistant_network_acme_email: "{{ lookup('infisical.vault.read_secrets', secret_name=homeassistant_network_acme_email_secret_name, path='/', project_id=infiscal_project_id, env_slug=infiscal_environment_slug, url=infiscal_url).value }}"
-homeassistant_dns01_provider: "cloudflare"
-cloudflare_email_secret_name: "cloudflare-email"
-cloudflare_email: "{{ lookup('infisical.vault.read_secrets', secret_name=cloudflare_email_secret_name, path='/', project_id=infiscal_project_id, env_slug=infiscal_environment_slug, url=infiscal_url).value }}"
-cloudflare_api_token_secret_name: "cloudflare-api-token"
-cloudflare_api_token: "{{ lookup('infisical.vault.read_secrets', secret_name=cloudflare_api_token_secret_name, path='/', project_id=infiscal_project_id, env_slug=infiscal_environment_slug, url=infiscal_url).value }}"

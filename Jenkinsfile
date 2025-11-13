@@ -138,13 +138,13 @@ pipeline {
                 }
             }
         }
-        stage('install-helm-charts') {
+        stage('make-cluster-storage') {
             steps {
                 withCredentials([sshUserPrivateKey(credentialsId: params.CONTROLLER_SSH_KEY, usernameVariable: 'controller_ssh_user', keyFileVariable: 'controller_ssh_key_path'), sshUserPrivateKey(credentialsId: params.WORKER_SSH_KEY, usernameVariable: 'worker_ssh_user', keyFileVariable: 'worker_ssh_key_path'), usernamePassword(credentialsId: params.INFISICAL_IDENTITY, usernameVariable: 'infisical_identity_client_id', passwordVariable: 'infisical_identity_secret')]) {
                     echo 'Running setup_addons Ansible playbook on workers...'
                     setup_env_vars(controller_ssh_user, controller_ssh_key_path, worker_ssh_user, worker_ssh_key_path, infisical_identity_client_id, infisical_identity_secret)
                     script {
-                        sh "${WORKSPACE}/.venv/bin/ansible-playbook '${WORKSPACE}/playbooks/install_helm_charts.yml' ${ansible_opts}"
+                        sh "${WORKSPACE}/.venv/bin/ansible-playbook '${WORKSPACE}/playbooks/make_cluster_storage.yml' ${ansible_opts}"
                     }
                 }
             }
