@@ -49,12 +49,12 @@ pipeline {
         )
         credentials(
             name: 'CONTROLLER_SSH_KEY',
-            credentialType: 'SSH Username with private key',
+            credentialType: 'com.cloudbees.jenkins.plugins.sshcredentials.impl.BasicSSHUserPrivateKey',
             description: 'SSH key for accessing the controller hosts'
         )
         credentials(
             name: 'WORKER_SSH_KEY',
-            credentialType: 'SSH Username with private key',
+            credentialType: 'com.cloudbees.jenkins.plugins.sshcredentials.impl.BasicSSHUserPrivateKey',
             description: 'SSH key for accessing the worker hosts'
         )
         string(
@@ -72,7 +72,7 @@ pipeline {
         )
         credentials(
             name: 'INFISICAL_IDENTITY',
-            credentialType: 'Username with password',
+            credentialType: 'com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl',
             description: 'Infisical service identity for universal authentication'
         )
     }
@@ -102,14 +102,9 @@ pipeline {
                         } catch (err) {
                         echo "Ansible linting validation failed: ${err}"
                         if (env.BRANCH_NAME == 'main') {
-                            timeout(time: 5, unit: 'MINUTES')
-                            {
-                                def validation_failure_input = input(message: "Would you like to still proceed?")
-                                if (validation_failure_input != 'Proceed') {
-                                    error("Build aborted due to validation failure.")
-                                } else {
-                                    unstable("Proceeding despite validation failure on main branch.")
-                                }
+                            timeout(time: 5, unit: 'MINUTES') {
+                                input(id: 'validation_failure_input', message: 'Would you like to still proceed?')
+                                unstable("Proceeding despite validation failure on main branch.")
                             }
                         } else {
                             unstable("Allowing to proceed on non-main branch.")
