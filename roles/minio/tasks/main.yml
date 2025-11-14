@@ -48,6 +48,10 @@
     update_repo_cache: true
     state: present
 
+- name: Debug controller hostname
+  ansible.builtin.debug:
+    msg: "Controller node is {{ groups['k8s_controller'][0] }}"
+
 - name: Patch controller with label
   kubernetes.core.k8s:
     state: present
