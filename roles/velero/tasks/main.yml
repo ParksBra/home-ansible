@@ -1,0 +1,5 @@
+- name: Install velero via helm
+  include_tasks: install_velero.yml
+
+- name: Apply velero via helm
+  include_tasks: apply_velero_via_helm.yml
