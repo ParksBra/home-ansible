@@ -16,7 +16,7 @@
       kubectl:
         image:
           repository: bitnamilegacy/kubectl
-          tag: "v1.33.4" # Old kubectl version for temp fix
+          tag: "v1.33.3" # Old kubectl version for temp fix
       credentials:
         useSecret: true
         existingSecret: cloud-credentials
