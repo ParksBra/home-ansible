@@ -34,14 +34,8 @@
           - name: pool0
             servers: 1
             volumesPerServer: 1
-            volumeClaimTemplate:
-              spec:
-                storageClassName: "minio-storageclass"
-                accessModes:
-                  - ReadWriteOnce
-                resources:
-                  requests:
-                    storage: 10Gi
+            storageClassName: minio-storageclass
+            size: 10Gi
             tolerations:
               - key: "node-role.kubernetes.io/control-plane"
                 operator: "Exists"
