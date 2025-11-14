@@ -47,7 +47,7 @@
         name: cloud-credentials
         namespace: velero
       type: Opaque
-      data:
+      stringData:
         cloud: |
           [default]
           aws_access_key_id={{ minio_access_key }}
