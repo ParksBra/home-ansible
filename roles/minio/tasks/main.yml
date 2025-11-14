@@ -73,6 +73,7 @@
         name: minio-storageclass
       provisioner: kubernetes.io/no-provisioner
       volumeBindingMode: WaitForFirstConsumer
+      reclaimPolicy: Retain
 
 - name: Create PV for local minio storage
   kubernetes.core.k8s:
