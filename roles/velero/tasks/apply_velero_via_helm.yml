@@ -25,7 +25,8 @@
       configuration:
         backupStorageLocation:
           - name: default
-            default: "true"
+            provider: aws
+            default: true
             bucket: "{{ minio_velero_bucket_name }}"
             config:
               region: "{{ minio_velero_bucket_region }}"
