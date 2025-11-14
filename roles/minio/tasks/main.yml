@@ -16,7 +16,7 @@
 - name: Install minio tenant via helm
   kubernetes.core.helm:
     name: minio-tenant
-    chart_ref: minio/minio
+    chart_ref: minio/tenant
     namespace: tenant
     create_namespace: true
     kubeconfig: "{{ k8s_kubectl_config_path }}"
