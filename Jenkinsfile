@@ -7,7 +7,7 @@ def setup_env_vars(controller_ssh_user, controller_ssh_key_path, worker_ssh_user
 
     env.DEBUG = params.DEBUG
 
-    env.INFISCAL_URL = params.INFISCAL_URL
+    env.INFISCAL_URL = "${params.INFISCAL_URL}:${params.INFISICAL_PORT}"
     env.INFISCAL_PROJECT_ID = params.INFISCAL_PROJECT_ID
     env.INFISCAL_ENVIRONMENT = params.INFISCAL_ENVIRONMENT_SLUG
     env.INFISICAL_UNIVERSAL_AUTH_CLIENT_ID = infisical_identity_client_id
@@ -59,7 +59,11 @@ pipeline {
         )
         string(
             name: 'INFISCAL_URL',
-            defaultValue: 'org.jenkinsci.plugins.plaincredentials.impl.StringCredentialsImpl'
+            defaultValue: 'http://localhost'
+        )
+        string(
+            name: 'INFISICAL_PORT',
+            defaultValue: '80'
         )
         credentials(
             name: 'INFISICAL_IDENTITY',
