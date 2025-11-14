@@ -43,6 +43,7 @@
 - name: Create PV for local minio storage
   kubernetes.core.k8s:
     state: present
+    kubeconfig: "{{ k8s_kubectl_config_path }}"
     definition:
       apiVersion: v1
       kind: PersistentVolume
@@ -68,6 +69,7 @@
 - name: Create PVC for local minio storage
   kubernetes.core.k8s:
     state: present
+    kubeconfig: "{{ k8s_kubectl_config_path }}"
     definition:
       apiVersion: v1
       kind: PersistentVolumeClaim
@@ -87,6 +89,7 @@
 - name: Create minio tenant secret
   kubernetes.core.k8s:
     state: present
+    kubeconfig: "{{ k8s_kubectl_config_path }}"
     definition:
       apiVersion: v1
       kind: Secret
@@ -97,5 +100,4 @@
       data:
         accesskey: "{{ minio_access_key }}"
         secretkey: "{{ minio_secret_key }}"
-    kubeconfig: "{{ k8s_kubectl_config_path }}"
   no_log: "{{ not debug_mode }}"
