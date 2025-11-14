@@ -98,6 +98,7 @@
         namespace: tenant
       type: Opaque
       stringData:
-        accesskey: "{{ minio_access_key }}"
-        secretkey: "{{ minio_secret_key }}"
+        config.env: |-
+          export MINIO_ROOT_USER={{ minio_access_key | quote }}
+          export MINIO_ROOT_PASSWORD={{ minio_secret_key | quote }}
   no_log: "{{ not debug }}"
