@@ -27,6 +27,8 @@
           volumeMounts:
             - mountPath: /target
               name: plugins
+      backupsEnabled: true
+      snapshotsEnabled: false
       configuration:
         backupStorageLocation:
           - name: default
