@@ -28,7 +28,7 @@
           existingSecret: "true"
         buckets:
           - name: "{{ minio_velero_bucket_name }}"
-            objectLock: "false"
+            objectLock: false
             region: "{{ minio_velero_bucket_region }}"
         pools:
           - name: pool0
