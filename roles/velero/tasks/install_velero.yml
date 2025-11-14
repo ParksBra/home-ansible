@@ -4,4 +4,11 @@
     dest: "{{ velero_install_dir }}"
     remote_src: true
     mode: '0755'
-    creates: "{{ velero_install_dir }}/velero"
+    creates: "{{ velero_install_dir }}/velero-v{{ velero_version }}-linux-arm64"
+
+- name: Create symlink for velero binary
+  ansible.builtin.file:
+    src: "{{ velero_install_dir }}/velero-v{{ velero_version }}-linux-arm64/velero"
+    dest: "{{ velero_install_dir }}/velero"
+    state: link
+    force: true
