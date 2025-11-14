@@ -59,21 +59,23 @@ pipeline {
         )
         string(
             name: 'INFISCAL_URL',
-            defaultValue: 'http://localhost:80'
-        )
-        string(
-            name: 'INFISCAL_PROJECT_ID',
-            description: 'Infisical project ID, normally UUID'
-        )
-        string(
-            name: 'INFISCAL_ENVIRONMENT_SLUG',
-            defaultValue: 'prod',
-            description: 'Infisical environment, e.g. prod, dev, staging'
+            defaultValue: 'org.jenkinsci.plugins.plaincredentials.impl.StringCredentialsImpl'
         )
         credentials(
             name: 'INFISICAL_IDENTITY',
             credentialType: 'com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl',
             description: 'Infisical service identity for universal authentication'
+        )
+        credentials(
+            name: 'INFISCAL_PROJECT_ID',
+            credentialsType: 'org.jenkinsci.plugins.plaincredentials.impl.StringCredentialsImpl',
+            description: 'Infisical project ID, normally UUID'
+        )
+        choice(
+            name: 'INFISCAL_ENVIRONMENT_SLUG',
+            defaultValue: 'prod',
+            choices: ['prod', 'dev', 'staging'],
+            description: 'Infisical environment, e.g. prod, dev, staging'
         )
     }
 
@@ -114,7 +116,7 @@ pipeline {
             }
         }
         stage('make-k8s-cluster') {
-            steps {
+            steps {with
                 withCredentials([sshUserPrivateKey(credentialsId: params.CONTROLLER_SSH_KEY, usernameVariable: 'controller_ssh_user', keyFileVariable: 'controller_ssh_key_path'), sshUserPrivateKey(credentialsId: params.WORKER_SSH_KEY, usernameVariable: 'worker_ssh_user', keyFileVariable: 'worker_ssh_key_path'), usernamePassword(credentialsId: params.INFISICAL_IDENTITY, usernameVariable: 'infisical_identity_client_id', passwordVariable: 'infisical_identity_secret')]) {
                     echo 'Running make_cluster Ansible playbook...'
                     setup_env_vars(controller_ssh_user, controller_ssh_key_path, worker_ssh_user, worker_ssh_key_path, infisical_identity_client_id, infisical_identity_secret)
