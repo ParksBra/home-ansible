@@ -1,0 +1,55 @@
+- name: Add minio repo to helm
+  kubernetes.core.helm_repository:
+    name: minio
+    repo_url: https://charts.min.io/
+    kubeconfig: "{{ k8s_kubectl_config_path }}"
+    force_update: true
+
+- name: Install minio operator via helm
+  kubernetes.core.helm:
+    name: minio-operator
+    chart_ref: minio/operator
+    namespace: minio-operator
+    create_namespace: true
+    kubeconfig: "{{ k8s_kubectl_config_path }}"
+
+- name: Install minio tenant via helm
+  kubernetes.core.helm:
+    name: minio-tenant
+    chart_ref: minio/minio
+    namespace: tenant
+    create_namespace: true
+    kubeconfig: "{{ k8s_kubectl_config_path }}"
+    release_values:
+      tenant:
+        name: minio-velero
+        configSecret:
+          name: minio-tenant-secret
+          existingSecret: "true"
+        buckets:
+          - name: "{{ minio_velero_bucket_name }}"
+            objectLock: "false"
+            region: "{{ minio_velero_bucket_region }}"
+        pools:
+          - name: pool0
+            servers: 1
+            volumesPerServer: 1
+            size: 10Gi
+    update_repo_cache: true
+    state: present
+
+- name: Create minio tenant secret
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Secret
+      metadata:
+        name: minio-tenant-secret
+        namespace: tenant
+      type: Opaque
+      data:
+        accesskey: "{{ minio_access_key }}"
+        secretkey: "{{ minio_secret_key }}"
+    kubeconfig: "{{ k8s_kubectl_config_path }}"
+  no_log: "{{ not debug_mode }}"

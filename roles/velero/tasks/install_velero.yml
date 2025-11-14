@@ -1,0 +1,6 @@
+- name: Unarchive velero install
+  ansible.builtin.unarchive:
+    src: "{{ velero_download_url }}"
+    dest: "{{ velero_install_dir }}"
+    mode: '0755'
+    creates: "{{ velero_install_dir }}/velero"

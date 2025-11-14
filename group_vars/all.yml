@@ -33,3 +33,14 @@ k8s_discovery_token: "{{ lookup('infisical.vault.read_secrets', secret_name=k8s_
 k8s_force_reset: "{{ lookup('env', 'K8S_FORCE_RESET') | default(false) | bool }}"
 k8s_kubelet_extra_args: "" # Additional args to pass to kubelet service
 k8s_kubelet_include_extra_args: false # Whether to include extra args file for kubelet
+
+velero_version: "1.17.1"
+velero_download_url: "https://github.com/vmware-tanzu/velero/releases/download/v{{ velero_version }}/velero-v{{ velero_version }}-linux-arm64.tar.gz"
+velero_install_dir: "/usr/local/bin"
+velero_apply_via_helm: true
+
+minio_access_key: "minioadmin"
+minio_secret_key_secret_name: "minio-credentials-secret"
+minio_secret_key: "{{ lookup('infisical.vault.read_secrets', secret_name=minio_secret_key_secret_name, path='/', project_id=infiscal_project_id, env_slug=infiscal_environment_slug, url=infiscal_url).value }}"
+minio_velero_bucket_name: "velero"
+minio_velero_bucket_region: "minio"
