@@ -34,11 +34,43 @@
           - name: pool0
             servers: 1
             volumesPerServer: 1
+            storageClassName: minio-storageclass
             size: 10Gi
             storageLabels:
               app.kubernetes.io/name: minio-pvc
+            tolerations:
+              - key: "node-role.kubernetes.io/control-plane"
+                operator: "Exists"
+                effect: "NoSchedule"
+            nodeSelector:
+              minio.io/storage-node: "true"
+            
     update_repo_cache: true
     state: present
+
+- name: Patch controller with label
+  kubernetes.core.k8s:
+    state: present
+    kubeconfig: "{{ k8s_kubectl_config_path }}"
+    definition:
+      apiVersion: apps/v1
+      kind: Node
+      metadata:
+        name: "{{ groups['k8s_controller'][0] }}"
+        labels:
+          minio.io/storage-node: "true"
+
+- name: Create storageclass for minio PVCs
+  kubernetes.core.k8s:
+    state: present
+    kubeconfig: "{{ k8s_kubectl_config_path }}"
+    definition:
+      apiVersion: storage.k8s.io/v1
+      kind: StorageClass
+      metadata:
+        name: minio-storageclass
+      provisioner: kubernetes.io/no-provisioner
+      volumeBindingMode: WaitForFirstConsumer
 
 - name: Create PV for local minio storage
   kubernetes.core.k8s:
@@ -55,8 +87,10 @@
         accessModes:
           - ReadWriteOnce
         persistentVolumeReclaimPolicy: Retain
+        storageClassName: minio-storageclass
         hostPath:
           path: "{{ minio_local_storage_path }}"
+          type: DirectoryOrCreate
         nodeAffinity:
             required:
               nodeSelectorTerms:
@@ -65,26 +99,6 @@
                       operator: In
                       values:
                         - "{{ groups['k8s_controller'][0] }}"
-
-- name: Create PVC for local minio storage
-  kubernetes.core.k8s:
-    state: present
-    kubeconfig: "{{ k8s_kubectl_config_path }}"
-    definition:
-      apiVersion: v1
-      kind: PersistentVolumeClaim
-      metadata:
-        name: minio-pvc
-        namespace: tenant
-        labels:
-          app.kubernetes.io/name: minio-pvc
-      spec:
-        accessModes:
-          - ReadWriteOnce
-        resources:
-          requests:
-            storage: 10Gi
-        volumeName: minio-pv
 
 - name: Create minio tenant secret
   kubernetes.core.k8s:
