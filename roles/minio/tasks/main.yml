@@ -97,7 +97,7 @@
         name: minio-tenant-secret
         namespace: tenant
       type: Opaque
-      data:
+      stringData:
         accesskey: "{{ minio_access_key }}"
         secretkey: "{{ minio_secret_key }}"
-  no_log: "{{ not debug_mode }}"
+  no_log: "{{ not debug }}"
