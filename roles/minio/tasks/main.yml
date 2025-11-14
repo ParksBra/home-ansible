@@ -1,7 +1,7 @@
 - name: Add minio repo to helm
   kubernetes.core.helm_repository:
     name: minio
-    repo_url: https://charts.min.io/
+    repo_url: https://operator.min.io/
     kubeconfig: "{{ k8s_kubectl_config_path }}"
     force_update: true
 
