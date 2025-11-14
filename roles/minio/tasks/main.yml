@@ -57,7 +57,7 @@
     state: present
     kubeconfig: "{{ k8s_kubectl_config_path }}"
     definition:
-      apiVersion: apps/v1
+      apiVersion: v1
       kind: Node
       metadata:
         name: "{{ groups['k8s_controller'][0] }}"
